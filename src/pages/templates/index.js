@@ -3,6 +3,7 @@ import { Typography, Grid, Button, IconButton } from '@mui/material';
 import AnimateButton from 'components/@extended/AnimateButton';
 import DownloadIcon from '@mui/icons-material/Download';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
+import { useNavigate } from "react-router-dom";
 
 // project import
 import MainCard from 'components/MainCard';
@@ -12,6 +13,8 @@ import TemplatesTable from './templatesTable';
 // ==============================|| TEMPLATES ||============================== //
 
 const Templates = () => {
+    const navigate = useNavigate();
+
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             <Grid item xs={12} md={12} lg={12}>
@@ -34,6 +37,7 @@ const Templates = () => {
                                         type="submit"
                                         variant="contained"
                                         color="primary"
+                                        onClick={() => navigate('/templates/add', { replace: true })}
                                     >
                                         New Template
                                     </Button>

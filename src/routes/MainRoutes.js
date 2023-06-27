@@ -8,6 +8,8 @@ import MainLayout from 'layout/MainLayout';
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 const Requests = Loadable(lazy(() => import('pages/requests')));
 const Templates = Loadable(lazy(() => import('pages/templates')));
+const TemplateForm = Loadable(lazy(() => import('pages/template-form/')));
+const RequestDetail = Loadable(lazy(() => import('pages/request-detail')));
 
 // render - sample page
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
@@ -62,8 +64,16 @@ const MainRoutes = {
             element: <Requests />
         },
         {
+            path: 'requests/request-detail/:id',
+            element: <RequestDetail />
+        },
+        {
             path: 'templates',
             element: <Templates />
+        },
+        {
+            path: 'templates/add',
+            element: <TemplateForm />
         }
     ]
 };
