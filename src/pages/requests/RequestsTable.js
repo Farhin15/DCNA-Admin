@@ -21,6 +21,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import { Link } from 'react-router-dom';
 
 // function createData(name, calories, fat, carbs, protein) {
 //     return {
@@ -393,7 +394,9 @@ export default function RequestsTable() {
                                             scope="row"
                                             padding="none"
                                         >
-                                            {row.id}
+                                            <Typography component={Link} to={"/requests/request-detail/" + row.id} variant="body1" sx={{ textDecoration: 'none' }} color="primary">
+                                                {row.id}
+                                            </Typography>
                                         </TableCell>
                                         <TableCell align="right">{row.name}</TableCell>
                                         <TableCell align="right">{row.satge}</TableCell>
