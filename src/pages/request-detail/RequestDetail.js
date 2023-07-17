@@ -5,7 +5,7 @@ import MainCard from 'components/MainCard';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
-const RequestInfo = () => (
+const RequestInfo = ({ requestDetail }) => (
     <MainCard content={false} >
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             <Grid item xs={12} md={12} lg={6}>
@@ -13,13 +13,13 @@ const RequestInfo = () => (
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
                         <Grid item xs={6} md={6} lg={6}><ListItemText primary="Name:" /></Grid>
                         <Grid item xs={6} md={6} lg={6}>
-                            <Typography variant="span">Test User</Typography>
+                            <Typography variant="span">{requestDetail?.first_name} {requestDetail?.last_name}</Typography>
                         </Grid>
                     </Grid>
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
                         <Grid item xs={6} md={6} lg={6}><ListItemText primary="Request Types:" /></Grid>
                         <Grid item xs={6} md={6} lg={6}>
-                            <Typography variant="span">Info Request</Typography>
+                            <Typography variant="span">{requestDetail?.request_type ?? '-'}</Typography>
                         </Grid>
                     </Grid>
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -31,7 +31,7 @@ const RequestInfo = () => (
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
                         <Grid item xs={6} md={6} lg={6}><ListItemText primary="Email:" /></Grid>
                         <Grid item xs={6} md={6} lg={6}>
-                            <Typography variant="span">testuser@mailinator.com</Typography>
+                            <Typography variant="span">{requestDetail?.email ?? '-'}</Typography>
                         </Grid>
                     </Grid>
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -49,13 +49,13 @@ const RequestInfo = () => (
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
                         <Grid item xs={6} md={6} lg={6}><ListItemText primary="Is California Resident:" /></Grid>
                         <Grid item xs={6} md={6} lg={6}>
-                            <Typography variant="span">Yes</Typography>
+                            <Typography variant="span">{requestDetail?.state == 'CA' ? 'Yes' : 'No'}</Typography>
                         </Grid>
                     </Grid>
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
                         <Grid item xs={6} md={6} lg={6}><ListItemText primary="Request Detail:" /></Grid>
                         <Grid item xs={6} md={6} lg={6}>
-                            <Typography variant="span">hello</Typography>
+                            <Typography variant="span">{requestDetail?.request_details ?? '-'}</Typography>
                         </Grid>
                     </Grid>
                 </List>
@@ -71,7 +71,7 @@ const RequestInfo = () => (
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
                         <Grid item xs={6} md={6} lg={6}><ListItemText primary="Requestor Type:" /></Grid>
                         <Grid item xs={6} md={6} lg={6}>
-                            <Typography variant="span">CUSTOMER</Typography>
+                            <Typography variant="span">{requestDetail?.requestor_type ?? '-'}</Typography>
                         </Grid>
                     </Grid>
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -95,7 +95,7 @@ const RequestInfo = () => (
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
                         <Grid item xs={6} md={6} lg={6}><ListItemText primary="Profile Email:" /></Grid>
                         <Grid item xs={6} md={6} lg={6}>
-                            <Typography variant="span">test@mailinator.com</Typography>
+                            <Typography variant="span">{requestDetail?.email ?? '-'}</Typography>
                         </Grid>
                     </Grid>
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>

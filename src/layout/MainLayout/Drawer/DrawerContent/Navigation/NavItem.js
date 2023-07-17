@@ -15,7 +15,7 @@ import { activeItem } from 'store/reducers/menu';
 const NavItem = ({ item, level }) => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const menu = useSelector((state) => state.menu);
+    const menu = useSelector((state) => state.menu.menu);
     const { drawerOpen, openItem } = menu;
 
     let itemTarget = '_self';

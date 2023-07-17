@@ -28,50 +28,77 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import Editor from 'components/Editor';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { fetchTemplateById, saveNewTemplate, updateTemplate } from 'store/reducers/templateSlice';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
-const Template = () => {
+const Template = ({ id }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    let data = null;
+    const [initValues, setInitValues] = useState(null)
 
-    const [level, setLevel] = useState();
-    const [showPassword, setShowPassword] = useState(false);
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
-    const changePassword = (value) => {
-        const temp = strengthIndicator(value);
-        setLevel(strengthColor(temp));
+    const addTemplate = (val) => {
+        if (id) {
+            dispatch(updateTemplate({ data: val, id: id }))
+                .unwrap()
+                .then(() => {
+                    navigate("/templates");
+                });
+        } else {
+            dispatch(saveNewTemplate(val))
+                .unwrap()
+                .then(() => {
+                    navigate("/templates");
+                });
+        }
     };
 
     useEffect(() => {
-        changePassword('');
-    }, []);
+        setInitValues(null)
+        if (id) {
+            if (data) {
+                setInitValues(data);
+            } else {
+                dispatch(fetchTemplateById(id))
+                    .unwrap()
+                    .then((res) => {
+                        data = res.template;
+                        let fetchData = {
+                            templatename: data.name,
+                            templatedescription: data.description,
+                            templateBody: data.content
+                        }
+                        setInitValues(fetchData);
+                    })
+                    .catch(error => console.log(error));
+            }
+        } else {
+            setInitValues({
+                templatename: '',
+                templatedescription: '',
+                templateBody: ''
+            })
+        }
+    }, [data])
 
     return (
         <>
-            <Formik
-                initialValues={{
-                    templatename: '',
-                    templatedescription: '',
-                    email: '',
-                    company: '',
-                    password: '',
-                    submit: null
-                }}
+            {initValues && <Formik
+                initialValues={initValues}
                 validationSchema={Yup.object().shape({
                     templatename: Yup.string().max(255).required('Template Name is required'),
                     templatedescription: Yup.string().max(255).required('Template Description is required'),
-                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required')
+                    templateBody: Yup.string().max(255).required('Template Body is required'),
+                    // email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+                    // password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                    console.log(JSON.stringify(values));
                     try {
+                        addTemplate(values)
                         setStatus({ success: false });
                         setSubmitting(false);
                     } catch (err) {
@@ -95,7 +122,7 @@ const Template = () => {
                                         name="templatename"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="John"
+                                        placeholder="Name"
                                         fullWidth
                                         error={Boolean(touched.templatename && errors.templatename)}
                                     />
@@ -118,7 +145,7 @@ const Template = () => {
                                         name="templatedescription"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="Doe"
+                                        placeholder="Description"
                                         inputProps={{}}
                                     />
                                     {touched.templatedescription && errors.templatedescription && (
@@ -130,8 +157,9 @@ const Template = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="company-signup">Template Body</InputLabel>
-                                    <Editor />
+                                    <InputLabel htmlFor="company-signup">Template Body*</InputLabel>
+                                    <Editor
+                                        handleChange={handleChange} templateBody={values.templateBody} />
                                     {/* <OutlinedInput
                                         fullWidth
                                         error={Boolean(touched.company && errors.company)}
@@ -143,9 +171,9 @@ const Template = () => {
                                         placeholder="Demo Inc."
                                         inputProps={{}}
                                     /> */}
-                                    {touched.company && errors.company && (
+                                    {touched.templateBody && errors.templateBody && (
                                         <FormHelperText error id="helper-text-company-signup">
-                                            {errors.company}
+                                            {errors.templateBody}
                                         </FormHelperText>
                                     )}
                                 </Stack>
@@ -190,7 +218,7 @@ const Template = () => {
                                                 variant="contained"
                                                 color="primary"
                                             >
-                                                Add Template
+                                                {id ? 'Update' : 'Add'} Template
                                             </Button>
                                         </AnimateButton>
                                     </Grid>
@@ -199,7 +227,7 @@ const Template = () => {
                         </Grid>
                     </form>
                 )}
-            </Formik>
+            </Formik>}
         </>
     );
 };

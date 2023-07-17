@@ -3,6 +3,7 @@ import { Typography, Grid, Button, IconButton } from '@mui/material';
 import AnimateButton from 'components/@extended/AnimateButton';
 import DownloadIcon from '@mui/icons-material/Download';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import PropTypes from 'prop-types';
 
 // project import
@@ -11,10 +12,32 @@ import RequestInfo from './RequestDetail';
 import EventsTable from './EventTable';
 import Info from './Info';
 import Activity from './Activity';
+import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchRequestById } from 'store/reducers/requestSlice';
+import { useEffect, useState } from 'react';
 
 // ==============================|| REQUESTS ||============================== //
 
 const RequestDetail = () => {
+    const { id } = useParams();
+    const dispatch = useDispatch();
+    const [requestDetail, setReuestDetail] = useState(null)
+
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchRequestById(id))
+                .unwrap()
+                .then((res) => {
+                    console.log(res.data);
+                    let data = res.data;
+                    setReuestDetail(data)
+                })
+                .catch(error => console.log(error));
+        }
+    }, [])
+
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             <Grid item xs={12} md={12} lg={12}>
@@ -89,12 +112,14 @@ const RequestDetail = () => {
                 </Grid>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography variant="label">Requests</Typography>
+                        <Typography component={Link} to="/requests" variant="label" sx={{ textDecoration: 'none' }} color="primary">
+                            Requests
+                        </Typography>
                     </Grid>
                     {/* <Grid item /> */}
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <RequestInfo />
+                    <RequestInfo requestDetail={requestDetail} />
                 </MainCard>
                 <MainCard sx={{ mt: 2 }} content={false}>
                     <EventsTable />

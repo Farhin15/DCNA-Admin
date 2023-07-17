@@ -37,7 +37,7 @@ const Templates = () => {
                                         type="submit"
                                         variant="contained"
                                         color="primary"
-                                        onClick={() => navigate('/templates/add', { replace: true })}
+                                        onClick={() => navigate('/templates/detail', { replace: true })}
                                     >
                                         New Template
                                     </Button>
