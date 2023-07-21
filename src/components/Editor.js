@@ -2,9 +2,9 @@ import React, { useState, useRef, useMemo } from 'react';
 import JoditEditor from 'jodit-react';
 
 
-const Editor = ({ placeholder }) => {
+const Editor = ({ placeholder, handleChange, templateBody }) => {
     const editor = useRef(null);
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(templateBody ?? '');
     const config = {
         readonly: false,
         uploader: {
@@ -91,8 +91,17 @@ const Editor = ({ placeholder }) => {
             ref={editor}
             value={content}
             config={config}
-            onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-            onChange={newContent => { }}
+            name="templateBody"
+            onBlur={newContent => handleChange({
+                target: {
+                    value: newContent, name: 'templateBody', type: "change"
+                }
+            })} // preferred to use only this option to update the content for performance reasons
+        // onChange={newContent => handleChange({
+        //     target: {
+        //         value: newContent, name: 'templateBody', type: "change"
+        //     }
+        // })}
         />
     );
 };

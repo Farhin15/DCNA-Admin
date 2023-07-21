@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // material-ui
 import {
@@ -33,6 +34,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const AuthLogin = () => {
     const [checked, setChecked] = React.useState(false);
+    const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => {
@@ -41,6 +43,45 @@ const AuthLogin = () => {
 
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
+    };
+    const handleLogin = (event, { setErrors, setStatus, setSubmitting }) => {
+        // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
+        // navigate('/')
+        axios
+            .post(
+                'http://127.0.0.1:8000/api/sign-in/',
+                {
+                    "username": "hirenpatel",
+                    "password": "Hiren@123"
+                },
+                {
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }
+            )
+            .then((response) => {
+                setStatus({ success: false });
+                setSubmitting(false);
+                console.log(response);
+                localStorage.setItem('Y_TOKEN', JSON.stringify(response.data.token));
+                // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
+                // if (response.data.success) {
+                // console.log(response.data.token);
+                navigate('/')
+                // }
+                // localStorage.getItem('Y_TOKEN') ? navigate('/') : <h1>hii</h1>;
+                // const data = localStorage.getItem('Y_TOKEN');
+                // console.log(data);
+                event.email = '';
+                event.password = '';
+            })
+
+            .catch((err) => {
+                setStatus({ success: false });
+                setErrors({ submit: err.message });
+                setSubmitting(false);
+            });
     };
 
     return (
@@ -56,9 +97,9 @@ const AuthLogin = () => {
                     password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                    console.log(values, setErrors, setStatus, setSubmitting);
                     try {
-                        setStatus({ success: false });
-                        setSubmitting(false);
+                        handleLogin(values, { setErrors, setStatus, setSubmitting })
                     } catch (err) {
                         setStatus({ success: false });
                         setErrors({ submit: err.message });

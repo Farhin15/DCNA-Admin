@@ -1,11 +1,12 @@
 // assets
 import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-
+import PeopleIcon from '@mui/icons-material/People';
 // icons
 const icons = {
     ConfirmationNumberOutlinedIcon,
-    EmailOutlinedIcon
+    EmailOutlinedIcon,
+    PeopleIcon
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -29,6 +30,14 @@ const requests = {
             type: 'item',
             url: '/templates',
             icon: icons.EmailOutlinedIcon,
+            breadcrumbs: false
+        },
+        {
+            id: 'users',
+            title: 'Users',
+            type: 'item',
+            url: '/users',
+            icon: icons.PeopleIcon,
             breadcrumbs: false
         }
     ]

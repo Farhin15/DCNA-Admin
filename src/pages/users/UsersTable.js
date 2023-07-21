@@ -1,21 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteTemplate, fetchALLTemplates, getAllTemplates, getLoading } from "store/reducers/templateSlice";
+import { deleteUser, fetchALLUsers, getAllUsers, getLoading } from "store/reducers/userSlice";
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space, Table, Modal } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import { hide, show } from 'store/reducers/loaderSlice';
 
-const TemplatesTable = () => {
-    const allCars = useSelector(getAllTemplates);
+const UsersTable = () => {
+    const allCars = useSelector(getAllUsers);
     const apiStatus = useSelector(getLoading);
     const dispatch = useDispatch();
     let contentToRender = "";
     const navigate = useNavigate();
-    const searchInput = useRef(null);
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
+    const searchInput = useRef(null);
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -111,35 +111,41 @@ const TemplatesTable = () => {
     });
     const columns = [
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-            width: '30%',
-            ...getColumnSearchProps('name'),
+            title: 'User Name',
+            dataIndex: 'username',
+            key: 'username',
+            width: '25%',
+            ...getColumnSearchProps('username'),
         },
         {
-            title: 'Description',
-            dataIndex: 'content',
-            key: 'content',
+            title: 'First Name',
+            dataIndex: 'first_name',
+            key: 'first_name',
             width: '20%',
-            ...getColumnSearchProps('content'),
+            ...getColumnSearchProps('first_name'),
         },
         {
-            title: 'Modified Date',
-            dataIndex: 'date_created',
-            key: 'date_created',
-            ...getColumnSearchProps('date_created'),
-            // sorter: (a, b) => a.date_created - b.date_created,
-            // sortDirections: ['descend', 'ascend'],
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+            ...getColumnSearchProps('email')
+        },
+        {
+            title: 'Address',
+            dataIndex: 'address',
+            width: '30%',
+            key: 'address',
+            ...getColumnSearchProps('address')
         },
         {
             title: 'Actions',
             dataIndex: 'action',
+            width: '10%',
             render: (item, record) => {
                 return (
                     <>
-                        <EditOutlined onClick={() => handleEditTemplate(record._id)} />
-                        <DeleteOutlined onClick={() => handleDeleteTemplate(record._id)} style={{ color: "red", marginLeft: 12 }} />
+                        <EditOutlined onClick={() => handleEditUser(record._id)} />
+                        <DeleteOutlined onClick={() => handleDeleteUser(record._id)} style={{ color: "red", marginLeft: 12 }} />
                     </>
                 )
             }
@@ -150,7 +156,7 @@ const TemplatesTable = () => {
     useEffect(() => {
         console.log(allCars);
         if (allCars.length == 0) {
-            dispatch(fetchALLTemplates());
+            dispatch(fetchALLUsers());
         }
         console.log(allCars);
     }, [dispatch]);
@@ -165,20 +171,20 @@ const TemplatesTable = () => {
 
     }, [allCars]);
 
-    const handleEditTemplate = (id) => {
-        navigate(`/templates/detail/${id}`);
+    const handleEditUser = (id) => {
+        navigate(`/users/user-detail/${id}`);
     }
 
-    const handleDeleteTemplate = (id) => {
+    const handleDeleteUser = (id) => {
         Modal.confirm({
             title: 'Are you sure, you want  to delete this category?',
             okText: 'Yes',
             okType: 'danger',
             onOk: () => {
-                dispatch(deleteTemplate(id))
+                dispatch(deleteUser(id))
                     .unwrap()
                     .then(() => {
-                        dispatch(fetchALLTemplates());
+                        dispatch(fetchALLUsers());
                     });
             }
         })
@@ -206,4 +212,4 @@ const TemplatesTable = () => {
     );
 };
 
-export default TemplatesTable;
+export default UsersTable;
