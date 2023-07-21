@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { useEffect } from 'react';
@@ -8,6 +8,7 @@ import { Button, Input, Space, Table } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -31,6 +32,10 @@ export default function RequestsTable() {
     const dispatch = useDispatch();
     // const data = useGetAllPostQuery()?.data?.data?.data
     const searchInput = useRef(null);
+    const [searchText, setSearchText] = useState('');
+    const [searchedColumn, setSearchedColumn] = useState('');
+
+
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
             <div
@@ -125,6 +130,7 @@ export default function RequestsTable() {
         {
             title: 'Id',
             dataIndex: '_id',
+            width: '30%',
             render: (text) => <a>{text}</a>,
             // filters: [
             //     {
@@ -224,8 +230,20 @@ export default function RequestsTable() {
     useEffect(() => {
         if (allCars.length == 0) {
             dispatch(fetchALLRequests());
+            // dispatch(showError("Success!"));
         }
+
     }, [dispatch]);
+
+    useEffect(() => {
+        if (allCars.length == 0) {
+            dispatch(show());
+            // dispatch(showError("Success!"));
+        } else {
+            dispatch(hide());
+        }
+
+    }, [allCars]);
 
     return (
         <Box sx={{ width: '100%' }}>

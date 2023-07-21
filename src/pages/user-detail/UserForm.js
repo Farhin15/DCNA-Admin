@@ -30,32 +30,39 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import Editor from 'components/Editor';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchTemplateById, saveNewTemplate, updateTemplate } from 'store/reducers/templateSlice';
-import { showSuccess } from 'store/reducers/snackbarSlice';
+import { fetchUserById, saveNewUser, updateUser } from 'store/reducers/userSlice';
+import { showError, showSuccess } from 'store/reducers/snackbarSlice';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
-const Template = ({ id }) => {
+const User = ({ id }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let data = null;
     const [initValues, setInitValues] = useState(null)
 
-    const addTemplate = (val) => {
+    const addUser = (val) => {
         if (id) {
-            dispatch(updateTemplate({ data: val, id: id }))
+            dispatch(updateUser({ data: val, id: id }))
                 .unwrap()
                 .then(() => {
-                    dispatch(showSuccess("Template Updated Successfully!"));
-                    navigate("/templates");
-                });
+                    dispatch(showSuccess("User Updated successfully!"));
+                    navigate("/users");
+                })
+                .catch((error) => dispatch(showError(error?.message)));
         } else {
-            dispatch(saveNewTemplate(val))
+            dispatch(saveNewUser(val))
                 .unwrap()
-                .then(() => {
-                    dispatch(showSuccess("Template Added Successfully!"));
-                    navigate("/templates");
-                });
+                .then((res) => {
+                    if (res.success) {
+                        dispatch(showSuccess("User Added successfully!"));
+                        navigate("/users");
+                    } else {
+                        dispatch(showError(res?.message))
+                    }
+                    console.log("then", res)
+                })
+                .catch((error) => dispatch(showError(error?.message)));
         }
     };
 
@@ -65,12 +72,12 @@ const Template = ({ id }) => {
             if (data) {
                 setInitValues(data);
             } else {
-                dispatch(fetchTemplateById(id))
+                dispatch(fetchUserById(id))
                     .unwrap()
                     .then((res) => {
                         data = res.template;
                         let fetchData = {
-                            templatename: data.name,
+                            first_name: data.name,
                             templatedescription: data.description,
                             templateBody: data.content
                         }
@@ -80,9 +87,11 @@ const Template = ({ id }) => {
             }
         } else {
             setInitValues({
-                templatename: '',
-                templatedescription: '',
-                templateBody: ''
+                username: '',
+                first_name: '',
+                last_name: '',
+                email: '',
+                address: ''
             })
         }
     }, [data])
@@ -92,16 +101,17 @@ const Template = ({ id }) => {
             {initValues && <Formik
                 initialValues={initValues}
                 validationSchema={Yup.object().shape({
-                    templatename: Yup.string().max(255).required('Template Name is required'),
-                    templatedescription: Yup.string().max(255).required('Template Description is required'),
-                    templateBody: Yup.string().max(255).required('Template Body is required'),
-                    // email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+                    username: Yup.string().max(255).required('User Name is required'),
+                    first_name: Yup.string().max(255).required('First Name is required'),
+                    last_name: Yup.string().max(255).required('Last Name is required'),
+                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+                    address: Yup.string().max(255).required('Last Name is required'),
                     // password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     console.log(JSON.stringify(values));
                     try {
-                        addTemplate(values)
+                        addUser(values)
                         setStatus({ success: false });
                         setSubmitting(false);
                     } catch (err) {
@@ -117,66 +127,105 @@ const Template = ({ id }) => {
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="templatename-signup">Template Name*</InputLabel>
+                                    <InputLabel htmlFor="username">User Name*</InputLabel>
                                     <OutlinedInput
-                                        id="templatename-login"
-                                        type="templatename"
-                                        value={values.templatename}
-                                        name="templatename"
+                                        id="username"
+                                        type="username"
+                                        value={values.username}
+                                        name="username"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="Name"
+                                        placeholder="User Name"
                                         fullWidth
-                                        error={Boolean(touched.templatename && errors.templatename)}
+                                        error={Boolean(touched.username && errors.username)}
                                     />
-                                    {touched.templatename && errors.templatename && (
-                                        <FormHelperText error id="helper-text-templatename-signup">
-                                            {errors.templatename}
+                                    {touched.username && errors.username && (
+                                        <FormHelperText error id="helper-text-username-signup">
+                                            {errors.username}
                                         </FormHelperText>
                                     )}
                                 </Stack>
                             </Grid>
                             <Grid item xs={12} md={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="templatedescription-signup">Template Description*</InputLabel>
+                                    <InputLabel htmlFor="first_name">First Name*</InputLabel>
                                     <OutlinedInput
-                                        fullWidth
-                                        error={Boolean(touched.templatedescription && errors.templatedescription)}
-                                        id="templatedescription-signup"
-                                        type="templatedescription"
-                                        value={values.templatedescription}
-                                        name="templatedescription"
+                                        id="first_name"
+                                        type="first_name"
+                                        value={values.first_name}
+                                        name="first_name"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="Description"
-                                        inputProps={{}}
+                                        placeholder="First Name"
+                                        fullWidth
+                                        error={Boolean(touched.first_name && errors.first_name)}
                                     />
-                                    {touched.templatedescription && errors.templatedescription && (
-                                        <FormHelperText error id="helper-text-templatedescription-signup">
-                                            {errors.templatedescription}
+                                    {touched.first_name && errors.first_name && (
+                                        <FormHelperText error id="helper-text-first_name-signup">
+                                            {errors.first_name}
+                                        </FormHelperText>
+                                    )}
+                                </Stack>
+                            </Grid>
+                            <Grid item xs={12} md={12}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="last_name">Last Name*</InputLabel>
+                                    <OutlinedInput
+                                        id="last_name"
+                                        type="last_name"
+                                        value={values.last_name}
+                                        name="last_name"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        placeholder="Last Name"
+                                        fullWidth
+                                        error={Boolean(touched.last_name && errors.last_name)}
+                                    />
+                                    {touched.last_name && errors.last_name && (
+                                        <FormHelperText error id="helper-text-last_name-signup">
+                                            {errors.last_name}
                                         </FormHelperText>
                                     )}
                                 </Stack>
                             </Grid>
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="company-signup">Template Body*</InputLabel>
-                                    <Editor
-                                        handleChange={handleChange} templateBody={values.templateBody} />
-                                    {/* <OutlinedInput
-                                        fullWidth
-                                        error={Boolean(touched.company && errors.company)}
-                                        id="company-signup"
-                                        value={values.company}
-                                        name="company"
+                                    <InputLabel htmlFor="email">Email*</InputLabel>
+                                    <OutlinedInput
+                                        id="email"
+                                        type="email"
+                                        value={values.email}
+                                        name="email"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="Demo Inc."
-                                        inputProps={{}}
-                                    /> */}
-                                    {touched.templateBody && errors.templateBody && (
-                                        <FormHelperText error id="helper-text-company-signup">
-                                            {errors.templateBody}
+                                        placeholder="Email"
+                                        fullWidth
+                                        error={Boolean(touched.email && errors.email)}
+                                    />
+                                    {touched.email && errors.email && (
+                                        <FormHelperText error id="helper-text-email-signup">
+                                            {errors.email}
+                                        </FormHelperText>
+                                    )}
+                                </Stack>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="address">Address*</InputLabel>
+                                    <OutlinedInput
+                                        id="address"
+                                        type="address"
+                                        value={values.address}
+                                        name="address"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        placeholder="Address"
+                                        fullWidth
+                                        error={Boolean(touched.address && errors.address)}
+                                    />
+                                    {touched.address && errors.address && (
+                                        <FormHelperText error id="helper-text-address-signup">
+                                            {errors.address}
                                         </FormHelperText>
                                     )}
                                 </Stack>
@@ -201,7 +250,7 @@ const Template = ({ id }) => {
                                                 type="reset"
                                                 variant="contained"
                                                 color="secondary"
-                                                onClick={() => navigate('/templates', { replace: true })}
+                                                onClick={() => navigate('/users', { replace: true })}
                                             >
                                                 Back
                                             </Button>
@@ -221,7 +270,7 @@ const Template = ({ id }) => {
                                                 variant="contained"
                                                 color="primary"
                                             >
-                                                {id ? 'Update' : 'Add'} Template
+                                                {id ? 'Update' : 'Add'} User
                                             </Button>
                                         </AnimateButton>
                                     </Grid>
@@ -235,4 +284,4 @@ const Template = ({ id }) => {
     );
 };
 
-export default Template;
+export default User;

@@ -8,10 +8,13 @@ import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
 import MainCard from 'components/MainCard';
 import Search from 'layout/MainLayout/Header/HeaderContent/Search';
 import UsersTable from './UsersTable';
+import { useNavigate } from 'react-router-dom';
 
 // ==============================|| USERS ||============================== //
 
 const Users = () => {
+    const navigate = useNavigate();
+
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             <Grid item xs={12} md={12} lg={12}>
@@ -43,6 +46,7 @@ const Users = () => {
                                         type="submit"
                                         variant="contained"
                                         color="primary"
+                                        onClick={() => navigate('/users/user-detail', { replace: true })}
                                     >
                                         Add User
                                     </Button>

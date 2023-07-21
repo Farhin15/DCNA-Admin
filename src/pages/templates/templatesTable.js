@@ -5,6 +5,7 @@ import { deleteTemplate, fetchALLTemplates, getAllTemplates, getLoading } from "
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space, Table, Modal } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 const TemplatesTable = () => {
     const allCars = useSelector(getAllTemplates);
@@ -13,6 +14,9 @@ const TemplatesTable = () => {
     let contentToRender = "";
     const navigate = useNavigate();
     const searchInput = useRef(null);
+    const [searchText, setSearchText] = useState('');
+    const [searchedColumn, setSearchedColumn] = useState('');
+
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
         setSearchText(selectedKeys[0]);
@@ -150,6 +154,16 @@ const TemplatesTable = () => {
         }
         console.log(allCars);
     }, [dispatch]);
+
+    useEffect(() => {
+        if (allCars.length == 0) {
+            dispatch(show());
+            // dispatch(showError("Success!"));
+        } else {
+            dispatch(hide());
+        }
+
+    }, [allCars]);
 
     const handleEditTemplate = (id) => {
         navigate(`/templates/detail/${id}`);

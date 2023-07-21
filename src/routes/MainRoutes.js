@@ -11,6 +11,7 @@ const Requests = Loadable(lazy(() => import('pages/requests')));
 const Templates = Loadable(lazy(() => import('pages/templates')));
 const Users = Loadable(lazy(() => import('pages/users')));
 const TemplateForm = Loadable(lazy(() => import('pages/template-form/')));
+const UserForm = Loadable(lazy(() => import('pages/user-detail/')));
 const RequestDetail = Loadable(lazy(() => import('pages/request-detail')));
 
 // render - sample page
@@ -84,6 +85,14 @@ const MainRoutes = {
         {
             path: 'users',
             element: <AuthGuard component={<Users />} />
+        },
+        {
+            path: 'users/user-detail',
+            element: <AuthGuard component={<UserForm />} />
+        },
+        {
+            path: 'users/user-detail/:id',
+            element: <AuthGuard component={<UserForm />} />
         },
     ]
 };

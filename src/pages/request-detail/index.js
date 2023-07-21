@@ -17,6 +17,19 @@ import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchRequestById } from 'store/reducers/requestSlice';
 import { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Switch from '@mui/material/Switch';
+import CommunicationForm from './communication/CommunicationForm.js'
 
 // ==============================|| REQUESTS ||============================== //
 
@@ -24,6 +37,28 @@ const RequestDetail = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const [requestDetail, setReuestDetail] = useState(null)
+    const [open, setOpen] = useState(false);
+    const [fullWidth, setFullWidth] = useState(true);
+    const [maxWidth, setMaxWidth] = useState('sm');
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleMaxWidthChange = (event) => {
+        setMaxWidth(
+            // @ts-expect-error autofill of arbitrary value is not handled.
+            event.target.value,
+        );
+    };
+
+    const handleFullWidthChange = (event) => {
+        setFullWidth(event.target.checked);
+    };
 
     useEffect(() => {
         if (id) {
@@ -83,6 +118,7 @@ const RequestDetail = () => {
                                         type="submit"
                                         variant="contained"
                                         color="primary"
+                                        onClick={handleClickOpen}
                                     >
                                         Customer Communication
                                     </Button>
@@ -132,6 +168,20 @@ const RequestDetail = () => {
                     <Activity />
                 </MainCard>
             </Grid>
+            <Dialog
+                fullWidth={fullWidth}
+                maxWidth={maxWidth}
+                open={open}
+                onClose={handleClose}
+            >
+                <DialogTitle>Communication</DialogTitle>
+                <DialogContent>
+                    <CommunicationForm close={handleClose} />
+                </DialogContent>
+                {/* <DialogActions>
+                    <Button onClick={handleClose}>Close</Button>
+                </DialogActions> */}
+            </Dialog>
         </Grid>
     );
 };
