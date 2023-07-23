@@ -29,12 +29,16 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { saveNewUser } from 'store/reducers/userSlice';
+import { useDispatch } from 'react-redux';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const AuthRegister = () => {
     const [level, setLevel] = useState();
     const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useDispatch();
+
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -48,6 +52,21 @@ const AuthRegister = () => {
         setLevel(strengthColor(temp));
     };
 
+    const addUser = (val) => {
+        dispatch(saveNewUser(val))
+            .unwrap()
+            .then((res) => {
+                if (res.success) {
+                    dispatch(showSuccess("User Added successfully!"));
+                    navigate("/login");
+                } else {
+                    dispatch(showError(res?.message))
+                }
+                console.log("then", res)
+            })
+            .catch((error) => dispatch(showError(error?.message)));
+    };
+
     useEffect(() => {
         changePassword('');
     }, []);
@@ -59,7 +78,7 @@ const AuthRegister = () => {
                     firstname: '',
                     lastname: '',
                     email: '',
-                    company: '',
+                    username: '',
                     password: '',
                     submit: null
                 }}
@@ -71,6 +90,7 @@ const AuthRegister = () => {
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
+                        addUser(values)
                         setStatus({ success: false });
                         setSubmitting(false);
                     } catch (err) {
@@ -129,21 +149,21 @@ const AuthRegister = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="company-signup">Company</InputLabel>
+                                    <InputLabel htmlFor="username-signup">Username</InputLabel>
                                     <OutlinedInput
                                         fullWidth
-                                        error={Boolean(touched.company && errors.company)}
-                                        id="company-signup"
-                                        value={values.company}
-                                        name="company"
+                                        error={Boolean(touched.username && errors.username)}
+                                        id="username-signup"
+                                        value={values.username}
+                                        name="username"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="Demo Inc."
+                                        placeholder="JohnDoe"
                                         inputProps={{}}
                                     />
-                                    {touched.company && errors.company && (
-                                        <FormHelperText error id="helper-text-company-signup">
-                                            {errors.company}
+                                    {touched.username && errors.username && (
+                                        <FormHelperText error id="helper-text-username-signup">
+                                            {errors.username}
                                         </FormHelperText>
                                     )}
                                 </Stack>
@@ -160,7 +180,7 @@ const AuthRegister = () => {
                                         name="email"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="demo@company.com"
+                                        placeholder="demo@username.com"
                                         inputProps={{}}
                                     />
                                     {touched.email && errors.email && (
