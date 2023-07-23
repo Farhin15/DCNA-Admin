@@ -3,14 +3,21 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 let url = process.env.REACT_APP_API_BASE_URL
 console.log(url);
-let headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Y_TOKEN'))}` }
 // url = url.replace(/";/, '')
+console.log(localStorage.getItem('Y_TOKEN'));
 
+const getHeaders = () => {
+    let headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Y_TOKEN'))}` }
+    console.log(headers);
+    return headers;
+}
 export const fetchALLUsers = createAsyncThunk("user/getAPI", async () => {
+    let headers = getHeaders();
     const response = await axios.get(`${url}user/list/`, { headers });
     return response.data.users;
 });
 export const fetchUserById = createAsyncThunk("user/getAPIById", async (id) => {
+    let headers = getHeaders();
     const response = await axios.get(`${url}user/${id}/`, { headers });
     console.log(response);
     return response.data;
@@ -24,14 +31,16 @@ export const fetchUserById = createAsyncThunk("user/getAPIById", async (id) => {
 export const saveNewUser = createAsyncThunk(
     "user/createAPI",
     async (payload) => {
-        const response = await axios.post(`${url}user/add/`, payload, { headers });
+        let headers = getHeaders();
+        const response = await axios.post(`${url}sign-up/`, payload, { headers });
         return response.data;
     }
 );
 
 export const updateUser = createAsyncThunk("user/updateAPI", async (payload) => {
+    let headers = getHeaders();
     const response = await axios.put(
-        `${url}user/form/${payload.id}`,
+        `${url}user/update/${payload.id}/`,
         payload.data,
         { headers }
     );
@@ -39,6 +48,7 @@ export const updateUser = createAsyncThunk("user/updateAPI", async (payload) => 
 });
 
 export const deleteUser = createAsyncThunk("user/deleteAPI", async (id) => {
+    let headers = getHeaders();
     const response = await axios.delete(`${url}user/delete/${id}`, { headers });
     return id;
 });

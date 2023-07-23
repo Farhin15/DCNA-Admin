@@ -3,20 +3,26 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 let url = process.env.REACT_APP_API_BASE_URL
 console.log(url);
-let headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Y_TOKEN'))}` }
 // url = url.replace(/";/, '')
-
+const getHeaders = () => {
+    let headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Y_TOKEN'))}` }
+    console.log(headers);
+    return headers;
+}
 export const fetchALLTemplates = createAsyncThunk("template/getAPI", async () => {
+    let headers = getHeaders();
     const response = await axios.get(`${url}template/list/`, { headers });
     return response.data.templates;
 });
 export const fetchTemplateById = createAsyncThunk("template/getAPIById", async (id) => {
+    let headers = getHeaders();
     const response = await axios.get(`${url}template/${id}/`, { headers });
     console.log(response);
     return response.data;
 });
 
 // export const fetchTemplateById = createAsyncThunk("template/getAPI", async () => {
+let headers = getHeaders();
 //     const response = await axios.get(`${url}`);
 //     return response.data;
 // });
@@ -24,12 +30,14 @@ export const fetchTemplateById = createAsyncThunk("template/getAPIById", async (
 export const saveNewTemplate = createAsyncThunk(
     "template/createAPI",
     async (payload) => {
+        let headers = getHeaders();
         const response = await axios.post(`${url}template/form/`, payload, { headers });
         return response.data;
     }
 );
 
 export const updateTemplate = createAsyncThunk("template/updateAPI", async (payload) => {
+    let headers = getHeaders();
     const response = await axios.put(
         `${url}template/form/${payload.id}`,
         payload.data,
@@ -39,6 +47,7 @@ export const updateTemplate = createAsyncThunk("template/updateAPI", async (payl
 });
 
 export const deleteTemplate = createAsyncThunk("template/deleteAPI", async (id) => {
+    let headers = getHeaders();
     const response = await axios.delete(`${url}template/delete/${id}`, { headers });
     return id;
 });

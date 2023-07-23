@@ -75,13 +75,13 @@ const User = ({ id }) => {
                 dispatch(fetchUserById(id))
                     .unwrap()
                     .then((res) => {
-                        data = res.template;
-                        let fetchData = {
-                            first_name: data.name,
-                            templatedescription: data.description,
-                            templateBody: data.content
-                        }
-                        setInitValues(fetchData);
+                        data = res.user;
+                        // let fetchData = {
+                        //     first_name: data.name,
+                        //     templatedescription: data.description,
+                        //     templateBody: data.content
+                        // }
+                        setInitValues(data);
                     })
                     .catch(error => console.log(error));
             }
@@ -91,7 +91,8 @@ const User = ({ id }) => {
                 first_name: '',
                 last_name: '',
                 email: '',
-                address: ''
+                address: '',
+                password: ''
             })
         }
     }, [data])
@@ -140,7 +141,7 @@ const User = ({ id }) => {
                                         error={Boolean(touched.username && errors.username)}
                                     />
                                     {touched.username && errors.username && (
-                                        <FormHelperText error id="helper-text-username-signup">
+                                        <FormHelperText error id="helper-text-username-user">
                                             {errors.username}
                                         </FormHelperText>
                                     )}
@@ -161,7 +162,7 @@ const User = ({ id }) => {
                                         error={Boolean(touched.first_name && errors.first_name)}
                                     />
                                     {touched.first_name && errors.first_name && (
-                                        <FormHelperText error id="helper-text-first_name-signup">
+                                        <FormHelperText error id="helper-text-first_name-user">
                                             {errors.first_name}
                                         </FormHelperText>
                                     )}
@@ -182,7 +183,7 @@ const User = ({ id }) => {
                                         error={Boolean(touched.last_name && errors.last_name)}
                                     />
                                     {touched.last_name && errors.last_name && (
-                                        <FormHelperText error id="helper-text-last_name-signup">
+                                        <FormHelperText error id="helper-text-last_name-user">
                                             {errors.last_name}
                                         </FormHelperText>
                                     )}
@@ -203,8 +204,29 @@ const User = ({ id }) => {
                                         error={Boolean(touched.email && errors.email)}
                                     />
                                     {touched.email && errors.email && (
-                                        <FormHelperText error id="helper-text-email-signup">
+                                        <FormHelperText error id="helper-text-email-user">
                                             {errors.email}
+                                        </FormHelperText>
+                                    )}
+                                </Stack>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="password">Password*</InputLabel>
+                                    <OutlinedInput
+                                        id="password"
+                                        type="password"
+                                        value={values.password}
+                                        name="password"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        placeholder="Email"
+                                        fullWidth
+                                        error={Boolean(touched.password && errors.password)}
+                                    />
+                                    {touched.password && errors.password && (
+                                        <FormHelperText error id="helper-text-password-user">
+                                            {errors.password}
                                         </FormHelperText>
                                     )}
                                 </Stack>
@@ -217,6 +239,8 @@ const User = ({ id }) => {
                                         type="address"
                                         value={values.address}
                                         name="address"
+                                        multiline={true}
+                                        minRows={3}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         placeholder="Address"
@@ -224,7 +248,7 @@ const User = ({ id }) => {
                                         error={Boolean(touched.address && errors.address)}
                                     />
                                     {touched.address && errors.address && (
-                                        <FormHelperText error id="helper-text-address-signup">
+                                        <FormHelperText error id="helper-text-address-user">
                                             {errors.address}
                                         </FormHelperText>
                                     )}
