@@ -49,7 +49,7 @@ const AuthLogin = () => {
         // navigate('/')
         axios
             .post(
-                process.env.REACT_APP_API_BASE_URL,
+                process.env.REACT_APP_API_BASE_URL + 'sign-in/',
                 // {
                 //     "username": "userOne",
                 //     "password": "User@123"
