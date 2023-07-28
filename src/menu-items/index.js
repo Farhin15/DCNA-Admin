@@ -9,7 +9,7 @@ import requests from './sideNav';
 
 const menuItems = {
     // items: [dashboard, requests, pages, utilities, support]
-    items: [dashboard, requests]
+    items: [requests]
 };
 
 export default menuItems;

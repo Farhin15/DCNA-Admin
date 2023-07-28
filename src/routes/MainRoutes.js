@@ -31,7 +31,7 @@ const MainRoutes = {
     children: [
         {
             path: '/',
-            element: <AuthGuard component={<DashboardDefault />} />
+            element: <AuthGuard component={<Requests />} />
         },
         {
             path: 'color',

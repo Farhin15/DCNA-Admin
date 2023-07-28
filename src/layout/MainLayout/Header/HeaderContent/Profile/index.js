@@ -103,7 +103,7 @@ const Profile = () => {
             >
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
                     <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-                    <Typography variant="subtitle1">John Doe</Typography>
+                    <Typography variant="subtitle1">{localStorage.getItem('userName')}</Typography>
                 </Stack>
             </ButtonBase>
             <Popper
@@ -146,10 +146,10 @@ const Profile = () => {
                                                     <Stack direction="row" spacing={1.25} alignItems="center">
                                                         <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
                                                         <Stack>
-                                                            <Typography variant="h6">John Doe</Typography>
-                                                            <Typography variant="body2" color="textSecondary">
+                                                            <Typography variant="h6">{localStorage.getItem('userName')}</Typography>
+                                                            {/* <Typography variant="body2" color="textSecondary">
                                                                 UI/UX Designer
-                                                            </Typography>
+                                                            </Typography> */}
                                                         </Stack>
                                                     </Stack>
                                                 </Grid>
@@ -181,7 +181,7 @@ const Profile = () => {
                                                             label="Profile"
                                                             {...a11yProps(0)}
                                                         />
-                                                        <Tab
+                                                        {/* <Tab
                                                             sx={{
                                                                 display: 'flex',
                                                                 flexDirection: 'row',
@@ -192,15 +192,15 @@ const Profile = () => {
                                                             icon={<SettingOutlined style={{ marginBottom: 0, marginRight: '10px' }} />}
                                                             label="Setting"
                                                             {...a11yProps(1)}
-                                                        />
+                                                        /> */}
                                                     </Tabs>
                                                 </Box>
                                                 <TabPanel value={value} index={0} dir={theme.direction}>
                                                     <ProfileTab handleLogout={handleLogout} />
                                                 </TabPanel>
-                                                <TabPanel value={value} index={1} dir={theme.direction}>
+                                                {/* <TabPanel value={value} index={1} dir={theme.direction}>
                                                     <SettingTab />
-                                                </TabPanel>
+                                                </TabPanel> */}
                                             </>
                                         )}
                                     </MainCard>

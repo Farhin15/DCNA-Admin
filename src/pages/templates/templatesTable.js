@@ -6,9 +6,10 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space, Table, Modal } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import { hide, show } from 'store/reducers/loaderSlice';
+import { Sorter } from 'common/sorter';
 
-const TemplatesTable = () => {
-    const allCars = useSelector(getAllTemplates);
+const TemplatesTable = ({ searchTerm }) => {
+    const allTemplates = useSelector(getAllTemplates);
     const apiStatus = useSelector(getLoading);
     const dispatch = useDispatch();
     let contentToRender = "";
@@ -16,6 +17,7 @@ const TemplatesTable = () => {
     const searchInput = useRef(null);
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
+    const [filterTemplates, setFilterTemplates] = useState()
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -106,8 +108,19 @@ const TemplatesTable = () => {
                 setTimeout(() => searchInput.current?.select(), 100);
             }
         },
-        render: (text) =>
-            text
+        sorter: {
+            compare: (a, b) => Sorter.DEFAULT(a[[dataIndex]], b[[dataIndex]]),
+            multiple: 3,
+        },
+        render: (text) => {
+            console.log(dataIndex);
+            if (dataIndex == 'content') {
+                return <span dangerouslySetInnerHTML={{ __html: text }}></span >;
+            } else {
+
+                return text;
+            }
+        }
     });
     const columns = [
         {
@@ -148,22 +161,38 @@ const TemplatesTable = () => {
 
 
     useEffect(() => {
-        console.log(allCars);
-        if (allCars.length == 0) {
+        console.log(allTemplates);
+        if (allTemplates.length == 0) {
             dispatch(fetchALLTemplates());
         }
-        console.log(allCars);
+        console.log(allTemplates);
     }, [dispatch]);
 
     useEffect(() => {
-        if (allCars.length == 0) {
+        if (allTemplates.length == 0) {
             dispatch(show());
             // dispatch(showError("Success!"));
         } else {
+            setFilterTemplates(allTemplates)
             dispatch(hide());
         }
 
-    }, [allCars]);
+    }, [allTemplates]);
+
+    useEffect(() => {
+        if (allTemplates.length && searchTerm) {
+            let filterData = allTemplates.filter(x => {
+                if (x?.name?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()) ||
+                    x?.content?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()) ||
+                    x?.description?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()))
+                    return x;
+            })
+            setFilterTemplates(filterData)
+        } else {
+            setFilterTemplates(allTemplates)
+        }
+
+    }, [searchTerm]);
 
     const handleEditTemplate = (id) => {
         navigate(`/templates/detail/${id}`);
@@ -195,7 +224,7 @@ const TemplatesTable = () => {
             </>
         ) : (
             <>
-                <Table columns={columns} dataSource={allCars} />
+                <Table columns={columns} dataSource={filterTemplates} />
             </>
         );
 

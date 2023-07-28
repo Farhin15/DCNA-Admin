@@ -1,5 +1,5 @@
 // material-ui
-import { Box, IconButton, Link, useMediaQuery } from '@mui/material';
+import { Box, IconButton, Link, useMediaQuery, Grid } from '@mui/material';
 import { GithubOutlined } from '@ant-design/icons';
 
 // project import
@@ -15,7 +15,15 @@ const HeaderContent = () => {
 
     return (
         <>
-            {!matchesXs && <Search />}
+            <Grid container direction="row" justifyContent="space-between" alignItems="center">
+                <Grid item>
+                    {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
+                </Grid>
+                <Grid item>
+                    <Profile />
+                </Grid>
+            </Grid>
+            {/* {!matchesXs && <Search />}
             {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
 
             <IconButton
@@ -32,7 +40,7 @@ const HeaderContent = () => {
 
             <Notification />
             {!matchesXs && <Profile />}
-            {matchesXs && <MobileSection />}
+            {matchesXs && <MobileSection />} */}
         </>
     );
 };

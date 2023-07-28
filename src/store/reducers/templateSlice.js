@@ -39,7 +39,7 @@ export const saveNewTemplate = createAsyncThunk(
 export const updateTemplate = createAsyncThunk("template/updateAPI", async (payload) => {
     let headers = getHeaders();
     const response = await axios.put(
-        `${url}template/form/${payload.id}`,
+        `${url}template/form/${payload.id}/`,
         payload.data,
         { headers }
     );
@@ -48,7 +48,7 @@ export const updateTemplate = createAsyncThunk("template/updateAPI", async (payl
 
 export const deleteTemplate = createAsyncThunk("template/deleteAPI", async (id) => {
     let headers = getHeaders();
-    const response = await axios.delete(`${url}template/delete/${id}`, { headers });
+    const response = await axios.delete(`${url}template/delete/${id}/`, { headers });
     return id;
 });
 
