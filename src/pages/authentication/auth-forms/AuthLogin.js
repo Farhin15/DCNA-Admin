@@ -66,6 +66,7 @@ const AuthLogin = () => {
                 setSubmitting(false);
                 console.log(response);
                 localStorage.setItem('Y_TOKEN', JSON.stringify(response.data.token));
+                localStorage.setItem('userName', event.username);
                 // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
                 // if (response.data.success) {
                 // console.log(response.data.token);

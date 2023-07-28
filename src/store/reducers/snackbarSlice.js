@@ -13,11 +13,13 @@ export const snackbarSlice = createSlice({
     reducers: {
         showSuccess: (state, action) => {
             state.successSnackbarOpen = true;
+            state.errorSnackbarOpen = false;
             state.snackbarMessage = action.payload
         },
         showError: (state, action) => {
             console.log(state, action);
             state.errorSnackbarOpen = true;
+            state.successSnackbarOpen = false;
             state.snackbarMessage = action.payload
         },
         clear: (state, action) => {

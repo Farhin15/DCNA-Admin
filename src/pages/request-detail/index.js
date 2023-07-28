@@ -38,6 +38,7 @@ const RequestDetail = () => {
     const dispatch = useDispatch();
     const [requestDetail, setReuestDetail] = useState(null)
     const [open, setOpen] = useState(false);
+    const [isRefresh, setIsRefresh] = useState(false);
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('sm');
 
@@ -45,8 +46,10 @@ const RequestDetail = () => {
         setOpen(true);
     };
 
-    const handleClose = () => {
+    const handleClose = (isSuccess) => {
         setOpen(false);
+        console.log(isSuccess);
+        setIsRefresh(isSuccess)
     };
 
     const handleMaxWidthChange = (event) => {
@@ -82,7 +85,7 @@ const RequestDetail = () => {
                     </Grid>
                     <Grid item>
                         <Grid container columnSpacing={0.5} alignItems="center" justifyContent="end">
-                            <Grid item>
+                            {/* <Grid item>
                                 <AnimateButton>
                                     <Button
                                         sx={{
@@ -99,12 +102,12 @@ const RequestDetail = () => {
                                         Refresh
                                     </Button>
                                 </AnimateButton>
-                            </Grid>
-                            <Grid item>
+                            </Grid> */}
+                            {/* <Grid item>
                                 <IconButton variant="contained" shape="rounded" aria-label="upload picture">
                                     <WatchLaterOutlinedIcon />
                                 </IconButton>
-                            </Grid>
+                            </Grid> */}
                             <Grid item>
                                 <AnimateButton>
                                     <Button
@@ -137,6 +140,7 @@ const RequestDetail = () => {
                                         type="submit"
                                         variant="contained"
                                         color="primary"
+                                        disabled
                                     >
                                         Internal Comment
                                     </Button>
@@ -165,18 +169,22 @@ const RequestDetail = () => {
                 </MainCard>
                 <Typography sx={{ mt: 2, paddingLeft: '5px' }} variant="h5">Activity</Typography>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <Activity />
+                    <Activity isRefresh={isRefresh} />
                 </MainCard>
             </Grid>
             <Dialog
                 fullWidth={fullWidth}
                 maxWidth={maxWidth}
                 open={open}
-                onClose={handleClose}
+                onClose={() => handleClose(false)}
             >
-                <DialogTitle>Communication</DialogTitle>
+                <DialogTitle sx={{ fontSize: '24px', fontWeight: '500' }}>
+                    {/* <Typography gutterBottom variant="h4" component="h3"> */}
+                    Communication
+                    {/* </Typography> */}
+                </DialogTitle>
                 <DialogContent>
-                    <CommunicationForm close={handleClose} />
+                    <CommunicationForm close={handleClose} requestDetail={requestDetail} />
                 </DialogContent>
                 {/* <DialogActions>
                     <Button onClick={handleClose}>Close</Button>

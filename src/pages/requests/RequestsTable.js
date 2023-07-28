@@ -9,6 +9,9 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
 import { hide, show } from 'store/reducers/loaderSlice';
+import { Sorter } from 'common/sorter';
+import * as XLSX from 'xlsx';
+import * as FileSaver from "file-saver";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -26,15 +29,15 @@ function getComparator(order, orderBy) {
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export default function RequestsTable() {
-    const allCars = useSelector(getAllRequests);
+export default function RequestsTable({ searchTerm, isExport }) {
+    const allRequests = useSelector(getAllRequests);
     const apiStatus = useSelector(getLoading);
     const dispatch = useDispatch();
     // const data = useGetAllPostQuery()?.data?.data?.data
     const searchInput = useRef(null);
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
-
+    const [filterRequests, setFilterRequests] = useState([])
 
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -115,6 +118,10 @@ export default function RequestsTable() {
             if (visible) {
                 setTimeout(() => searchInput.current?.select(), 100);
             }
+        },
+        sorter: {
+            compare: (a, b) => Sorter.DEFAULT(a[[dataIndex]], b[[dataIndex]]),
+            multiple: 3,
         },
         render: (text) =>
             dataIndex === '_id' ? (
@@ -228,7 +235,7 @@ export default function RequestsTable() {
     };
 
     useEffect(() => {
-        if (allCars.length == 0) {
+        if (allRequests.length == 0) {
             dispatch(fetchALLRequests());
             // dispatch(showError("Success!"));
         }
@@ -236,19 +243,179 @@ export default function RequestsTable() {
     }, [dispatch]);
 
     useEffect(() => {
-        if (allCars.length == 0) {
+        if (allRequests.length == 0) {
             dispatch(show());
             // dispatch(showError("Success!"));
         } else {
+            setFilterRequests(allRequests);
             dispatch(hide());
         }
 
-    }, [allCars]);
+    }, [allRequests]);
+
+    useEffect(() => {
+        if (allRequests.length && searchTerm) {
+            let filterData = allRequests.filter(x => {
+                if (x?.request_type?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()) ||
+                    x?.first_name?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()))
+                    return x;
+            })
+            setFilterRequests(filterData)
+        } else {
+            setFilterRequests(allRequests);
+        }
+
+    }, [searchTerm]);
+
+    function tableToCSVNew(data_table, type) {
+        // Variable to store the final csv data
+        var csv_data = [];
+        // Get each row data
+        var rows = data_table;
+        var cols = Object.keys(rows[0]);
+
+        var rowsNew = rows[0];
+        // var rowCount = Object.keys(rowsNew).length;
+
+        for (var i = 0; i < rows.length; i++) {
+            // Get each column data
+            var csvrow = [];
+            var count = 1;
+
+            if (csv_data.length === 0) {
+                for (let j = 0; j < cols.length; j++) {
+                    let density = "density_" + count;
+                    let frequency = "frequency_" + count;
+                    if (rowsNew[cols[j]] != null && (rowsNew[cols[j]].hasOwnProperty(density) || rowsNew[cols[j]].hasOwnProperty(frequency))) {
+                        let colName = cols[j][0].toUpperCase() + cols[j].slice(1);
+                        csvrow.push(colName);
+                        csvrow.push("");
+                        count++;
+                    } else if (rowsNew[cols[j]] != null && (rowsNew[cols[j]].hasOwnProperty("Rank") || rowsNew[cols[j]].hasOwnProperty("URL"))) {
+                        let colName = cols[j][0].toUpperCase() + cols[j].slice(1);
+                        csvrow.push(colName);
+                        csvrow.push("");
+                        count++;
+                    } else {
+                        let colName = cols[j][0].toUpperCase() + cols[j].slice(1);
+                        csvrow.push(colName);
+                    }
+
+                    if (count > 3)
+                        count = 1;
+                }
+                if (type === "EXCEL") {
+                    csv_data.push(csvrow.join(",,"));
+                } else {
+                    csv_data.push(csvrow.join(","));
+                }
+
+                csvrow = [];
+                count = 1;
+                if (Object.values(rowsNew).filter(a => typeof (a) == 'object').length > 0 && Object.values(rowsNew).filter(a => typeof (a) == 'object').findIndex(e => e !== null) > -1) {
+                    for (let j = 0; j < cols.length; j++) {
+                        let density = "density_" + count;
+                        let frequency = "frequency_" + count;
+                        if (rowsNew[cols[j]] != null && (rowsNew[cols[j]].hasOwnProperty(density) || rowsNew[cols[j]].hasOwnProperty(frequency))) {
+                            let densityColName = "density";
+                            let frequencyColName = "frequency";
+                            csvrow.push(densityColName);
+                            csvrow.push(frequencyColName);
+                            count++;
+                        } else if (rowsNew[cols[j]] != null && (rowsNew[cols[j]].hasOwnProperty("Rank") || rowsNew[cols[j]].hasOwnProperty("URL"))) {
+                            csvrow.push("Rank");
+                            csvrow.push("URL");
+                            count++;
+                        } else {
+                            csvrow.push("");
+                        }
+
+                        if (count > 3)
+                            count = 1;
+                    }
+                    if (type === "EXCEL") {
+                        csv_data.push(csvrow.join(",,"));
+                    } else {
+                        csv_data.push(csvrow.join(","));
+                    }
+                }
+            }
+
+            csvrow = [];
+            count = 1;
+            // Stores each csv row data
+            for (let j = 0; j < cols.length; j++) {
+                // Get the text data of each cell
+                // of a row and push it to csvrow
+                let density = "density_" + count;
+                let frequency = "frequency_" + count;
+                if (rowsNew[cols[j]] != null && (rowsNew[cols[j]].hasOwnProperty(density) || rowsNew[cols[j]].hasOwnProperty(frequency))) {
+                    csvrow.push(rows[i][cols[j]][density]);
+                    csvrow.push(rows[i][cols[j]][frequency]);
+                    count++;
+                } else if (rowsNew[cols[j]] != null && (rowsNew[cols[j]].hasOwnProperty("Rank") || rowsNew[cols[j]].hasOwnProperty("URL"))) {
+                    csvrow.push(rows[i][cols[j]]["Rank"]);
+                    csvrow.push(rows[i][cols[j]]["URL"]);
+                    count++;
+                } else {
+                    csvrow.push(rows[i][cols[j]]);
+                }
+
+                if (count > 3)
+                    count = 1;
+            }
+            // Combine each column value with comma
+            if (type === "EXCEL") {
+                csv_data.push(csvrow.join(",,"));
+            }
+            else {
+                csv_data.push(csvrow.join(","));
+            }
+        }
+        // Combine each row data with new line character
+        if (type === "EXCEL") {
+            csv_data = csv_data.join("\n");
+        } else {
+            csv_data = csv_data.join("\n");
+        }
+
+        return csv_data;
+    }
+
+    useEffect(() => {
+        if (filterRequests.length && isExport) {
+            if (filterRequests?.length > 0) {
+                let list = filterRequests;
+
+                let exportList = list?.map((data) => {
+                    const { key, ...rest } = data;
+                    return rest;
+                });
+
+                let exportListArray = tableToCSVNew(exportList, "EXCEL");
+                let csvFileTxt = exportListArray.toString();
+                let arrayOfArrayCsv = csvFileTxt.split("\n").map((row) => {
+                    return row.split(",,")
+                });
+
+                const fileType =
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+                const fileExtension = ".xlsx";
+
+                const ws = XLSX.utils.aoa_to_sheet(arrayOfArrayCsv);
+                const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+                const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+                const data = new Blob([excelBuffer], { type: fileType });
+                FileSaver.saveAs(data, 'Requests' + fileExtension);
+            }
+        }
+
+    }, [isExport]);
 
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%' }}>
-                <Table columns={columns} dataSource={allCars} />
+                <Table columns={columns} dataSource={filterRequests} />
             </Paper>
         </Box>
     );

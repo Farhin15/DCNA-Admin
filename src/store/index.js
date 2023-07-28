@@ -9,6 +9,7 @@ import userReducer from './reducers/userSlice';
 // import snackReducer from './reducers/uiReducer';
 import snackbarReducer from './reducers/snackbarSlice';
 import loaderReducer from './reducers/loaderSlice';
+import communicationReducer from './reducers/communicationSlice';
 
 // ==============================|| REDUX TOOLKIT - MAIN STORE ||============================== //
 
@@ -18,6 +19,7 @@ const store = configureStore({
         template: templateReducer,
         request: requestReducer,
         user: userReducer,
+        communication: communicationReducer,
         snack: snackbarReducer,
         loader: loaderReducer,
     },

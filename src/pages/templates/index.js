@@ -9,12 +9,17 @@ import { useNavigate } from "react-router-dom";
 import MainCard from 'components/MainCard';
 import Search from 'layout/MainLayout/Header/HeaderContent/Search';
 import TemplatesTable from './templatesTable';
+import { useState } from 'react';
 
 // ==============================|| TEMPLATES ||============================== //
 
 const Templates = () => {
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState()
 
+    const onSearch = (val) => {
+        setSearchTerm(val)
+    }
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             <Grid item xs={12} md={12} lg={12}>
@@ -24,6 +29,10 @@ const Templates = () => {
                     </Grid>
                     <Grid item>
                         <Grid container columnSpacing={0.5} alignItems="center" justifyContent="end">
+                            <Grid item>
+                                <Search onSearch={onSearch} placeHolder="Search" />
+                                {/* <Typography variant="strong">0 SELECTED</Typography> */}
+                            </Grid>
                             <Grid item>
                                 <AnimateButton>
                                     <Button
@@ -48,7 +57,7 @@ const Templates = () => {
                     {/* <Grid item /> */}
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <TemplatesTable />
+                    <TemplatesTable searchTerm={searchTerm} />
                 </MainCard>
             </Grid>
         </Grid>

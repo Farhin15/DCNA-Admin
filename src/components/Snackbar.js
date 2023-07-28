@@ -5,7 +5,7 @@ import { clear } from "store/reducers/snackbarSlice";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-export default function SuccessSnackbar() {
+export default function SnackbarComponent() {
     const dispatch = useDispatch();
 
     const message = useSelector(

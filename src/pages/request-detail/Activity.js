@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { SmileOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
@@ -14,6 +14,10 @@ import {
     Tabs,
 } from '@mui/material';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchALLCommunications, getAllCommunications, getLoading } from 'store/reducers/communicationSlice';
+import { useParams } from 'react-router-dom';
+import Message from 'components/Message';
 
 function createData(eventName, eventStartDate, eventEndDate, eventStatus) {
     return { eventName, eventStartDate, eventEndDate, eventStatus };
@@ -35,9 +39,29 @@ TabPanel.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function Activity() {
+export default function Activity({ isRefresh }) {
     const theme = useTheme();
     const [expanded, setExpanded] = React.useState('');
+    const communications = useSelector(getAllCommunications);
+    console.log(communications);
+    const apiStatus = useSelector(getLoading);
+    const dispatch = useDispatch();
+    const { id } = useParams();
+
+    useEffect(() => {
+        console.log(communications);
+        if (id) {
+            dispatch(fetchALLCommunications(id));
+        }
+        console.log(communications);
+    }, [dispatch, id]);
+
+    useEffect(() => {
+        // console.log(isRefresh);
+        if (isRefresh) {
+            dispatch(fetchALLCommunications(id));
+        }
+    }, [isRefresh]);
 
     // const handleChange = (panel) => {
     //     setExpanded(panel == expanded ? '' : panel);
@@ -96,14 +120,9 @@ export default function Activity() {
                     <TabPanel value={value} index={0} dir={theme.direction}>
                         <Stack spacing={2} sx={{ m: 2 }}>
                             <Typography variant="h5">Customer Communication,</Typography>
-                            <Typography>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                            </Typography>
-                            <Typography>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                            </Typography>
+                            {communications?.length ? communications?.map((item, index) => {
+                                return <Message key={index} message={item} />
+                            }) : <></>}
                         </Stack>
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>

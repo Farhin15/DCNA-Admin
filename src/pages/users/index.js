@@ -9,11 +9,25 @@ import MainCard from 'components/MainCard';
 import Search from 'layout/MainLayout/Header/HeaderContent/Search';
 import UsersTable from './UsersTable';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 // ==============================|| USERS ||============================== //
 
 const Users = () => {
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState()
+    const [isExport, setIsExport] = useState(false)
+
+    const onSearch = (val) => {
+        setSearchTerm(val)
+    }
+
+    const ExportData = () => {
+        setIsExport(true);
+        setTimeout(() => {
+            setIsExport(false);
+        }, 500);
+    }
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -25,14 +39,14 @@ const Users = () => {
                     <Grid item>
                         <Grid container columnSpacing={0.5} alignItems="center" justifyContent="end">
                             <Grid item>
-                                <Search placeHolder="Search" />
+                                <Search onSearch={onSearch} placeHolder="Search" />
                                 {/* <Typography variant="strong">0 SELECTED</Typography> */}
                             </Grid>
-                            <Grid item>
+                            {/* <Grid item>
                                 <IconButton variant="contained" shape="rounded" aria-label="upload picture">
                                     <WatchLaterOutlinedIcon />
                                 </IconButton>
-                            </Grid>
+                            </Grid> */}
                             <Grid item>
                                 <AnimateButton>
                                     <Button
@@ -65,6 +79,7 @@ const Users = () => {
                                         type="submit"
                                         variant="contained"
                                         color="primary"
+                                        onClick={ExportData}
                                     >
                                         {/* <IconButton size="small" sx={{ color: '#FFFFFF' }} variant="contained" shape="rounded"> */}
                                         <DownloadIcon />
@@ -78,7 +93,7 @@ const Users = () => {
                     {/* <Grid item /> */}
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <UsersTable />
+                    <UsersTable searchTerm={searchTerm} isExport={isExport} />
                 </MainCard>
             </Grid>
         </Grid>

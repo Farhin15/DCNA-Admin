@@ -2,7 +2,7 @@
 import Routes from 'routes';
 import ThemeCustomization from 'themes';
 import ScrollTop from 'components/ScrollTop';
-import SuccessSnackbar from 'components/SuccessSnackbar';
+import SnackbarComponent from 'components/Snackbar';
 import LoaderSlider from 'components/LoaderSlider';
 
 
@@ -10,7 +10,7 @@ import LoaderSlider from 'components/LoaderSlider';
 
 const App = () => (
     <ThemeCustomization>
-        <SuccessSnackbar />
+        <SnackbarComponent />
         <LoaderSlider />
         <ScrollTop>
             <Routes />
