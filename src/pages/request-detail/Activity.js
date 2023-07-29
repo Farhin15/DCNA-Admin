@@ -47,7 +47,6 @@ export default function Activity({ isRefresh }) {
     const apiStatus = useSelector(getLoading);
     const dispatch = useDispatch();
     const { id } = useParams();
-
     useEffect(() => {
         console.log(communications);
         if (id) {

@@ -38,7 +38,6 @@ export default function RequestsTable({ searchTerm, isExport }) {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [filterRequests, setFilterRequests] = useState([])
-
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
             <div
@@ -213,7 +212,7 @@ export default function RequestsTable({ searchTerm, isExport }) {
         },
         {
             title: 'Date Created',
-            dataIndex: 'extended',
+            dataIndex: 'date_created',
         },
         {
             title: 'Source',
