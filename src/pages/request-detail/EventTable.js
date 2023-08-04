@@ -178,7 +178,7 @@ export default function EventsTable() {
                     }}
                 >
                     <OrderTableHead order={order} orderBy={orderBy} />
-                    <TableBody>
+                    {/* <TableBody>
                         {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
                             const isItemSelected = isSelected(row.eventName);
                             const labelId = `enhanced-table-checkbox-${index}`;
@@ -193,11 +193,11 @@ export default function EventsTable() {
                                     key={index}
                                     selected={isItemSelected}
                                 >
-                                    {/* <TableCell component="th" id={labelId} scope="row">
+                                    <TableCell component="th" id={labelId} scope="row">
                                         <Link color="secondary" component={RouterLink} to="">
                                             {row.eventName}
                                         </Link>
-                                    </TableCell> */}
+                                    </TableCell>
                                     <TableCell>{row.eventName}</TableCell>
                                     <TableCell>{new Date(row.eventStartDate).toLocaleString()}</TableCell>
                                     <TableCell>{new Date(row.eventEndDate).toLocaleString()}</TableCell>
@@ -207,7 +207,7 @@ export default function EventsTable() {
                                 </TableRow>
                             );
                         })}
-                    </TableBody>
+                    </TableBody> */}
                 </Table>
             </TableContainer>
         </Box>

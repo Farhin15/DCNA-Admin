@@ -132,10 +132,10 @@ const TemplatesTable = ({ searchTerm }) => {
         },
         {
             title: 'Description',
-            dataIndex: 'content',
-            key: 'content',
+            dataIndex: 'description',
+            key: 'description',
             width: '20%',
-            ...getColumnSearchProps('content'),
+            ...getColumnSearchProps('description'),
         },
         {
             title: 'Modified Date',
@@ -183,7 +183,7 @@ const TemplatesTable = ({ searchTerm }) => {
         if (allTemplates.length && searchTerm) {
             let filterData = allTemplates.filter(x => {
                 if (x?.name?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()) ||
-                    x?.content?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()) ||
+                    // x?.content?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()) ||
                     x?.description?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()))
                     return x;
             })
