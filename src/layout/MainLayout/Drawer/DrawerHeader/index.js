@@ -16,10 +16,10 @@ const DrawerHeader = ({ open }) => {
 
     return (
         // only available in paid version
-        <DrawerHeaderStyled justifyContent="center" theme={theme} open={open}>
-            <Stack direction="row" justifyContent="center" spacing={1} alignItems="center">
+        <DrawerHeaderStyled justifyContent="center" alignItems="center" theme={theme} open={open}>
+            <Stack direction="row" justifyContent="center" spacing={2} alignItems="center">
                 {/* <Typography variant="h3">LOGO</Typography> */}
-                <img style={{ height: '50px', marginLeft: '20px', marginTop: '10px' }} src={img} alt="DCNA_LOGO" />
+                <img style={{ height: '45px', marginLeft: '45px', marginTop: '15px', marginBottom: '15px', }} src={img} alt="DCNA_LOGO" />
                 {/* <Logo /> */}
                 {/* <Chip
                     label={process.env.REACT_APP_VERSION}

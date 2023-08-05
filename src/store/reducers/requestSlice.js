@@ -5,7 +5,9 @@ let url = process.env.REACT_APP_API_BASE_URL
 console.log(url);
 // url = url.replace(/";/, '')
 const getHeaders = () => {
-    let headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Y_TOKEN'))}` }
+    let headers = {
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('Y_TOKEN'))}`
+    }
     console.log(headers);
     return headers;
 }

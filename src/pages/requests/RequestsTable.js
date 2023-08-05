@@ -256,6 +256,7 @@ export default function RequestsTable({ searchTerm, isExport }) {
         if (allRequests.length && searchTerm) {
             let filterData = allRequests.filter(x => {
                 if (x?.request_type?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()) ||
+                    x?._id?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()) ||
                     x?.first_name?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()))
                     return x;
             })
