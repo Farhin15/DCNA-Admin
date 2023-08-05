@@ -16,7 +16,8 @@ import {
     Stack,
     Typography,
     Select,
-    MenuItem
+    MenuItem,
+    Paper
 } from '@mui/material';
 
 // third party
@@ -35,7 +36,9 @@ import { useParams } from 'react-router-dom';
 import { fetchALLTemplates, fetchTemplateById, saveNewTemplate, updateTemplate } from 'store/reducers/templateSlice';
 import { showSuccess } from 'store/reducers/snackbarSlice';
 import { saveNewCommunication } from 'store/reducers/communicationSlice';
-
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardContent from "@material-ui/core/CardContent";
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const Communication = ({ close, requestDetail }) => {
@@ -46,6 +49,7 @@ const Communication = ({ close, requestDetail }) => {
     const [initValues, setInitValues] = useState(null)
     const [templateList, setTemplateList] = useState([])
     const [isDisabled, setisDisabled] = useState(false)
+    const [selectedTemplate, setSelectedTemplate] = useState(null)
 
     const addCommunication = (val) => {
         dispatch(saveNewCommunication(val))
@@ -111,14 +115,20 @@ const Communication = ({ close, requestDetail }) => {
                                         value={values.template_id}
                                         onChange={(e) => {
                                             if (e.target.value) {
+                                                setSelectedTemplate(templateList.filter(x => x._id === e.target.value)[0])
                                                 values.message = '';
                                                 setisDisabled(true)
                                             } else {
+                                                setSelectedTemplate(null)
                                                 setisDisabled(false)
                                             }
                                             handleChange(e)
                                         }}
+                                        displayEmpty
                                     >
+                                        <MenuItem value="">
+                                            <em>Select Category</em>
+                                        </MenuItem>
                                         {templateList.map((item, index) => {
                                             return (<MenuItem key={index} value={item._id}>{item.name}</MenuItem>)
                                         })}
@@ -130,7 +140,7 @@ const Communication = ({ close, requestDetail }) => {
                                     )}
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} md={12}>
+                            {!isDisabled ? <Grid item xs={12} md={12}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="message-signup">Template Text</InputLabel>
                                     <OutlinedInput
@@ -154,7 +164,28 @@ const Communication = ({ close, requestDetail }) => {
                                         </FormHelperText>
                                     )}
                                 </Stack>
-                            </Grid>
+                            </Grid> : <>
+                                <Grid item xs={12} md={12}>
+                                    <Stack>
+                                        <Paper variant="outlined">
+                                            <Card>
+                                                <CardContent>
+                                                    {/* <Grid item> */}
+                                                    <Typography gutterBottom variant="h4" component="h3">
+                                                        {selectedTemplate?.name}
+                                                    </Typography>
+                                                    <Typography variant="body1" color="textSecondary" component="p">
+                                                        {selectedTemplate?.description ?? ""}
+                                                    </Typography>
+                                                    <Grid item >
+                                                        <span dangerouslySetInnerHTML={{ __html: selectedTemplate?.content }}></span >
+                                                    </Grid>
+                                                </CardContent>
+                                            </Card>
+                                        </Paper>
+                                    </Stack>
+                                </Grid>
+                            </>}
                             <Grid item>
                                 <Grid container columnSpacing={0.5} alignItems="center" justifyContent="start">
                                     <Grid item>

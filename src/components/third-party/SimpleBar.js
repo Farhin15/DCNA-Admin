@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { alpha, styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 
 // third-party
 import SimpleBar from 'simplebar-react';
@@ -42,6 +42,7 @@ const SimpleBarStyle = styled(SimpleBar)(({ theme }) => ({
 export default function SimpleBarScroll({ children, sx, ...other }) {
     return (
         <>
+            <Divider />
             <RootStyle>
                 <SimpleBarStyle timeout={500} clickOnTrack={false} sx={sx} {...other}>
                     {children}
