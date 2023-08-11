@@ -210,7 +210,7 @@ const User = ({ id }) => {
                                     )}
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="password">Password*</InputLabel>
                                     <OutlinedInput
@@ -230,7 +230,7 @@ const User = ({ id }) => {
                                         </FormHelperText>
                                     )}
                                 </Stack>
-                            </Grid>
+                            </Grid> */}
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="address">Address*</InputLabel>

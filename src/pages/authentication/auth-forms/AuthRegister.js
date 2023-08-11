@@ -31,6 +31,8 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { saveNewUser } from 'store/reducers/userSlice';
 import { useDispatch } from 'react-redux';
+import { showError, showSuccess } from 'store/reducers/snackbarSlice';
+import { useNavigate } from 'react-router-dom';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -38,6 +40,7 @@ const AuthRegister = () => {
     const [level, setLevel] = useState();
     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate()
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -56,6 +59,7 @@ const AuthRegister = () => {
         dispatch(saveNewUser(val))
             .unwrap()
             .then((res) => {
+                debugger
                 if (res.success) {
                     dispatch(showSuccess("User Added successfully!"));
                     navigate("/login");
@@ -64,7 +68,10 @@ const AuthRegister = () => {
                 }
                 console.log("then", res)
             })
-            .catch((error) => dispatch(showError(error?.message)));
+            .catch((error) => {
+                debugger
+                dispatch(showError(error?.message))
+            });
     };
 
     useEffect(() => {
@@ -86,7 +93,8 @@ const AuthRegister = () => {
                     firstname: Yup.string().max(255).required('First Name is required'),
                     lastname: Yup.string().max(255).required('Last Name is required'),
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required')
+                    password: Yup.string().max(255).required('Password is required'),
+                    address: Yup.string().max(255).required('Address is required'),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
@@ -186,6 +194,30 @@ const AuthRegister = () => {
                                     {touched.email && errors.email && (
                                         <FormHelperText error id="helper-text-email-signup">
                                             {errors.email}
+                                        </FormHelperText>
+                                    )}
+                                </Stack>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="address-signup">Address*</InputLabel>
+                                    <OutlinedInput
+                                        fullWidth
+                                        error={Boolean(touched.address && errors.address)}
+                                        id="address-login"
+                                        type="address"
+                                        value={values.address}
+                                        name="address"
+                                        multiline={true}
+                                        minRows={3}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        placeholder="Address"
+                                        inputProps={{}}
+                                    />
+                                    {touched.address && errors.address && (
+                                        <FormHelperText error id="helper-text-address-signup">
+                                            {errors.address}
                                         </FormHelperText>
                                     )}
                                 </Stack>
