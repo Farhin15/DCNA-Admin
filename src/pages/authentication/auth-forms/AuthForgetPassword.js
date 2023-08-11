@@ -34,10 +34,11 @@ import { showSuccess } from 'store/reducers/snackbarSlice';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
-const AuthLogin = () => {
+const AuthForgetPassword = () => {
     const [checked, setChecked] = React.useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch()
+
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -51,9 +52,9 @@ const AuthLogin = () => {
         // navigate('/')
         axios
             .post(
-                process.env.REACT_APP_API_BASE_URL + 'sign-in/',
+                process.env.REACT_APP_API_BASE_URL + 'forgot-password/',
                 // {
-                //     "username": "userOne",
+                //     "email": "userOne",
                 //     "password": "User@123"
                 // },
                 event,
@@ -65,22 +66,10 @@ const AuthLogin = () => {
             )
             .then((response) => {
                 setStatus({ success: false });
+                dispatch(showSuccess('OTP has been sent to your email'))
                 setSubmitting(false);
-                console.log(response);
-                localStorage.setItem('Y_TOKEN', JSON.stringify(response.data.token));
-                localStorage.setItem('userName', event.username);
-                localStorage.setItem('user_id', response.data.user_id);
-                // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
-                // if (response.data.success) {
-                // console.log(response.data.token);
-                navigate('/')
-                dispatch(showSuccess('Logged in successfully!'))
-                // }
-                // localStorage.getItem('Y_TOKEN') ? navigate('/') : <h1>hii</h1>;
-                // const data = localStorage.getItem('Y_TOKEN');
-                // console.log(data);
+                navigate('/reset-password')
                 event.email = '';
-                event.password = '';
             })
 
             .catch((err) => {
@@ -94,13 +83,10 @@ const AuthLogin = () => {
         <>
             <Formik
                 initialValues={{
-                    username: '',
-                    password: '',
-                    submit: null
+                    email: ''
                 }}
                 validationSchema={Yup.object().shape({
-                    username: Yup.string().max(255).required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required')
+                    email: Yup.string().max(255).required('Email is required'),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     console.log(values, setErrors, setStatus, setSubmitting);
@@ -118,61 +104,26 @@ const AuthLogin = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="username-login">Username</InputLabel>
+                                    <InputLabel htmlFor="email-login">Email</InputLabel>
                                     <OutlinedInput
-                                        id="username-login"
-                                        type="username"
-                                        value={values.username}
-                                        name="username"
+                                        id="email-login"
+                                        type="email"
+                                        value={values.email}
+                                        name="email"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="Enter username"
+                                        placeholder="demo@username.com"
                                         fullWidth
-                                        error={Boolean(touched.username && errors.username)}
+                                        error={Boolean(touched.email && errors.email)}
                                     />
-                                    {touched.username && errors.username && (
-                                        <FormHelperText error id="standard-weight-helper-text-username-login">
-                                            {errors.username}
+                                    {touched.email && errors.email && (
+                                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                                            {errors.email}
                                         </FormHelperText>
                                     )}
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12}>
-                                <Stack spacing={1}>
-                                    <InputLabel htmlFor="password-login">Password</InputLabel>
-                                    <OutlinedInput
-                                        fullWidth
-                                        error={Boolean(touched.password && errors.password)}
-                                        id="-password-login"
-                                        type={showPassword ? 'text' : 'password'}
-                                        value={values.password}
-                                        name="password"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    edge="end"
-                                                    size="large"
-                                                >
-                                                    {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        placeholder="Enter password"
-                                    />
-                                    {touched.password && errors.password && (
-                                        <FormHelperText error id="standard-weight-helper-text-password-login">
-                                            {errors.password}
-                                        </FormHelperText>
-                                    )}
-                                </Stack>
-                            </Grid>
-
-                            <Grid item xs={12} sx={{ mt: -1 }}>
+                            {/* <Grid item xs={12} sx={{ mt: -1 }}>
                                 <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                                     <FormControlLabel
                                         control={
@@ -186,11 +137,11 @@ const AuthLogin = () => {
                                         }
                                         label={<Typography variant="h6">Keep me sign in</Typography>}
                                     />
-                                    <Link variant="h6" component={RouterLink} to="/forgot-password" color="text.primary">
+                                    <Link variant="h6" component={RouterLink} to="" color="text.primary">
                                         Forgot Password?
                                     </Link>
                                 </Stack>
-                            </Grid>
+                            </Grid> */}
                             {errors.submit && (
                                 <Grid item xs={12}>
                                     <FormHelperText error>{errors.submit}</FormHelperText>
@@ -207,17 +158,9 @@ const AuthLogin = () => {
                                         variant="contained"
                                         color="primary"
                                     >
-                                        Login
+                                        Submit
                                     </Button>
                                 </AnimateButton>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Divider>
-                                    <Typography variant="caption"> Login with</Typography>
-                                </Divider>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FirebaseSocial />
                             </Grid>
                         </Grid>
                     </form>
@@ -227,4 +170,4 @@ const AuthLogin = () => {
     );
 };
 
-export default AuthLogin;
+export default AuthForgetPassword;

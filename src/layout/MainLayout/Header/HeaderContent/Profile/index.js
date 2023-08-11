@@ -61,7 +61,7 @@ const Profile = () => {
     //logout fuctionality
 
     const handleLogout = () => {
-        localStorage.removeItem('Y_TOKEN');
+        localStorage.clear();
         navigate('/login');
     };
 
