@@ -31,7 +31,7 @@ import Editor from 'components/Editor';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchTemplateById, saveNewTemplate, updateTemplate } from 'store/reducers/templateSlice';
-import { showSuccess } from 'store/reducers/snackbarSlice';
+import { showError, showSuccess } from 'store/reducers/snackbarSlice';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -48,14 +48,16 @@ const Template = ({ id }) => {
                 .then(() => {
                     dispatch(showSuccess("Template Updated Successfully!"));
                     navigate("/templates");
-                });
+                })
+                .catch(err => dispatch(showError("Template name is already exits or something went wrong!")))
         } else {
             dispatch(saveNewTemplate(val))
                 .unwrap()
                 .then(() => {
                     dispatch(showSuccess("Template Added Successfully!"));
                     navigate("/templates");
-                });
+                })
+                .catch(err => dispatch(showError("Template name is already exits or something went wrong!")));
         }
     };
 
