@@ -34,7 +34,7 @@ import Editor from 'components/Editor';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchALLTemplates, fetchTemplateById, saveNewTemplate, updateTemplate } from 'store/reducers/templateSlice';
-import { showSuccess } from 'store/reducers/snackbarSlice';
+import { showError, showSuccess } from 'store/reducers/snackbarSlice';
 import { saveNewCommunication } from 'store/reducers/communicationSlice';
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -52,15 +52,20 @@ const Communication = ({ close, requestDetail }) => {
     const [selectedTemplate, setSelectedTemplate] = useState(null)
 
     const addCommunication = (val) => {
-        dispatch(saveNewCommunication(val))
-            .unwrap()
-            .then(() => {
-                dispatch(showSuccess("Message Sent Successfully!"));
-                close(true);
-                setTimeout(() => {
-                    close(false);
-                }, 500);
-            });
+        if (val.messages || val.template_id) {
+            dispatch(saveNewCommunication(val))
+                .unwrap()
+                .then(() => {
+                    dispatch(showSuccess("Message Sent Successfully!"));
+                    close(true);
+                    setTimeout(() => {
+                        close(false);
+                    }, 500);
+                })
+                .catch(() => dispatch(showError('Something went wrong!')));
+        } else {
+            dispatch(showError('Select template or atleast write a message.'))
+        }
     };
 
     useEffect(() => {
@@ -75,6 +80,7 @@ const Communication = ({ close, requestDetail }) => {
                 console.log(res);
                 setTemplateList(res)
             })
+            .catch(() => dispatch(showError('Something went wrong!')))
     }, [data])
 
     return (

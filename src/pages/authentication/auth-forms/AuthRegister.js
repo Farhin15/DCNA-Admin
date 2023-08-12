@@ -59,7 +59,6 @@ const AuthRegister = () => {
         dispatch(saveNewUser(val))
             .unwrap()
             .then((res) => {
-                debugger
                 if (res.success) {
                     dispatch(showSuccess("User Added successfully!"));
                     navigate("/login");
@@ -69,8 +68,7 @@ const AuthRegister = () => {
                 console.log("then", res)
             })
             .catch((error) => {
-                debugger
-                dispatch(showError(error?.message))
+                dispatch(showError(error?.message ?? 'Something went wrong!'))
             });
     };
 
@@ -93,7 +91,11 @@ const AuthRegister = () => {
                     firstname: Yup.string().max(255).required('First Name is required'),
                     lastname: Yup.string().max(255).required('Last Name is required'),
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required'),
+                    password: Yup.string().max(255).required('Password is required')
+                        .matches(
+                            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+                            "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                        ),
                     address: Yup.string().max(255).required('Address is required'),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
@@ -304,14 +306,14 @@ const AuthRegister = () => {
                                     </Button>
                                 </AnimateButton>
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Divider>
                                     <Typography variant="caption">Sign up with</Typography>
                                 </Divider>
                             </Grid>
                             <Grid item xs={12}>
                                 <FirebaseSocial />
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </form>
                 )}

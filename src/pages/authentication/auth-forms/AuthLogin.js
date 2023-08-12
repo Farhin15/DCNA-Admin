@@ -30,7 +30,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
-import { showSuccess } from 'store/reducers/snackbarSlice';
+import { showError, showSuccess } from 'store/reducers/snackbarSlice';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -85,6 +85,7 @@ const AuthLogin = () => {
 
             .catch((err) => {
                 setStatus({ success: false });
+                dispatch(showError('Something went wrong!'))
                 setErrors({ submit: err.message });
                 setSubmitting(false);
             });
@@ -101,6 +102,10 @@ const AuthLogin = () => {
                 validationSchema={Yup.object().shape({
                     username: Yup.string().max(255).required('Email is required'),
                     password: Yup.string().max(255).required('Password is required')
+                        .matches(
+                            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+                            "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                        )
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     console.log(values, setErrors, setStatus, setSubmitting);
@@ -211,14 +216,14 @@ const AuthLogin = () => {
                                     </Button>
                                 </AnimateButton>
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Divider>
                                     <Typography variant="caption"> Login with</Typography>
                                 </Divider>
                             </Grid>
                             <Grid item xs={12}>
                                 <FirebaseSocial />
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </form>
                 )}

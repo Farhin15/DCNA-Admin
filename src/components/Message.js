@@ -35,7 +35,7 @@ export default function Message({ message }) {
                 </Typography>
 
                 <Typography variant="body1" color="textSecondary" component="p">
-                    {message?.message ?? message?.template_id.description
+                    {message?.message ?? message?.template_id?.description
                         ?? ""}
                 </Typography>
                 <Grid item >

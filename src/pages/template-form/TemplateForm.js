@@ -78,7 +78,7 @@ const Template = ({ id }) => {
                         }
                         setInitValues(fetchData);
                     })
-                    .catch(error => console.log(error));
+                    .catch(error => dispatch(showError('Something went wrong!')));
             }
         } else {
             setInitValues({

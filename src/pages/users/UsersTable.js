@@ -9,6 +9,7 @@ import { hide, show } from 'store/reducers/loaderSlice';
 import { Sorter } from 'common/sorter';
 import * as XLSX from 'xlsx';
 import * as FileSaver from "file-saver";
+import { showError } from 'store/reducers/snackbarSlice';
 
 const UsersTable = ({ searchTerm, isExport }) => {
     const allUsers = useSelector(getAllUsers);
@@ -152,8 +153,8 @@ const UsersTable = ({ searchTerm, isExport }) => {
             render: (item, record) => {
                 return (
                     <>
-                        <EditOutlined onClick={() => handleEditUser(record._id)} />
-                        <DeleteOutlined onClick={() => handleDeleteUser(record._id)} style={{ color: "red", marginLeft: 12 }} />
+                        <EditOutlined onClick={() => handleEditUser(record._id)} style={{ marginRight: 8 }} />
+                        <DeleteOutlined onClick={() => handleDeleteUser(record._id)} style={{ color: "red" }} />
                     </>
                 )
             }
@@ -355,7 +356,8 @@ const UsersTable = ({ searchTerm, isExport }) => {
                     .unwrap()
                     .then(() => {
                         dispatch(fetchALLUsers());
-                    });
+                    })
+                    .catch(() => dispatch(showError('Something went wrong!')));
             }
         })
     };
