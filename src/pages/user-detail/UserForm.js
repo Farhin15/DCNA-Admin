@@ -49,7 +49,7 @@ const User = ({ id }) => {
                     dispatch(showSuccess("User Updated successfully!"));
                     navigate("/users");
                 })
-                .catch((error) => dispatch(showError(error?.message)));
+                .catch((error) => dispatch(showError(error?.message ?? 'Something went wrong!')));
         } else {
             dispatch(saveNewUser(val))
                 .unwrap()
@@ -62,7 +62,7 @@ const User = ({ id }) => {
                     }
                     console.log("then", res)
                 })
-                .catch((error) => dispatch(showError(error?.message)));
+                .catch((error) => dispatch(showError(error?.message ?? 'Something went wrong!')));
         }
     };
 
@@ -83,7 +83,7 @@ const User = ({ id }) => {
                         // }
                         setInitValues(data);
                     })
-                    .catch(error => console.log(error));
+                    .catch(error => dispatch(showError('Something went wrong!')));
             }
         } else {
             setInitValues({
@@ -106,7 +106,7 @@ const User = ({ id }) => {
                     first_name: Yup.string().max(255).required('First Name is required'),
                     last_name: Yup.string().max(255).required('Last Name is required'),
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    address: Yup.string().max(255).required('Last Name is required'),
+                    address: Yup.string().max(255).required('Address is required'),
                     // password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {

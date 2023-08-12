@@ -30,7 +30,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
-import { showSuccess } from 'store/reducers/snackbarSlice';
+import { showError, showSuccess } from 'store/reducers/snackbarSlice';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -74,6 +74,7 @@ const AuthResetPassword = () => {
             })
 
             .catch((err) => {
+                dispatch(showError('Something went wrong!'))
                 setStatus({ success: false });
                 setErrors({ submit: err.message });
                 setSubmitting(false);
@@ -89,9 +90,17 @@ const AuthResetPassword = () => {
                     new_password: ''
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().max(255).required('Email is required'),
-                    otp: Yup.string().max(255).required('OTP is required'),
-                    new_password: Yup.string().max(255).required('New Password is required'),
+                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+                    otp: Yup.string().max(255).required('OTP is required')
+                        .matches(
+                            /^(?=.*[0-9])/,
+                            "Must be a valid OTP"
+                        ),
+                    new_password: Yup.string().max(255).required('New Password is required')
+                        .matches(
+                            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+                            "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                        ),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     console.log(values, setErrors, setStatus, setSubmitting);

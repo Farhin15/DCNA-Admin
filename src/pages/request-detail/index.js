@@ -30,6 +30,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
 import CommunicationForm from './communication/CommunicationForm.js'
+import { showError } from 'store/reducers/snackbarSlice';
 
 // ==============================|| REQUESTS ||============================== //
 
@@ -72,7 +73,7 @@ const RequestDetail = () => {
                     let data = res.data;
                     setReuestDetail(data)
                 })
-                .catch(error => console.log(error));
+                .catch(error => dispatch(showError('Something went wrong!')));
         }
     }, [])
 

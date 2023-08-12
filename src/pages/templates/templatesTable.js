@@ -7,6 +7,7 @@ import { Button, Input, Space, Table, Modal } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import { hide, show } from 'store/reducers/loaderSlice';
 import { Sorter } from 'common/sorter';
+import { showError } from 'store/reducers/snackbarSlice';
 
 const TemplatesTable = ({ searchTerm }) => {
     const allTemplates = useSelector(getAllTemplates);
@@ -151,8 +152,8 @@ const TemplatesTable = ({ searchTerm }) => {
             render: (item, record) => {
                 return (
                     <>
-                        <EditOutlined onClick={() => handleEditTemplate(record._id)} />
-                        <DeleteOutlined onClick={() => handleDeleteTemplate(record._id)} style={{ color: "red", marginLeft: 12 }} />
+                        <EditOutlined onClick={() => handleEditTemplate(record._id)} style={{ marginRight: 8 }} />
+                        <DeleteOutlined onClick={() => handleDeleteTemplate(record._id)} style={{ color: "red" }} />
                     </>
                 )
             }
@@ -208,7 +209,8 @@ const TemplatesTable = ({ searchTerm }) => {
                     .unwrap()
                     .then(() => {
                         dispatch(fetchALLTemplates());
-                    });
+                    })
+                    .catch(() => dispatch(showError('Something went wrong!')));
             }
         })
     };

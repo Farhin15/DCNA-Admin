@@ -30,7 +30,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
-import { showSuccess } from 'store/reducers/snackbarSlice';
+import { showError, showSuccess } from 'store/reducers/snackbarSlice';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -71,9 +71,9 @@ const AuthForgetPassword = () => {
                 navigate('/reset-password')
                 event.email = '';
             })
-
             .catch((err) => {
                 setStatus({ success: false });
+                dispatch(showError('Something went wrong!'))
                 setErrors({ submit: err.message });
                 setSubmitting(false);
             });
@@ -86,7 +86,7 @@ const AuthForgetPassword = () => {
                     email: ''
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().max(255).required('Email is required'),
+                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     console.log(values, setErrors, setStatus, setSubmitting);
