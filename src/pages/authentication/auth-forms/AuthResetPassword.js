@@ -133,7 +133,7 @@ const AuthResetPassword = () => {
                                     <InputLabel htmlFor="otp-login">OTP</InputLabel>
                                     <OutlinedInput
                                         id="otp-login"
-                                        type="number"
+                                        type="string"
                                         value={values.otp}
                                         name="otp"
                                         onBlur={handleBlur}
