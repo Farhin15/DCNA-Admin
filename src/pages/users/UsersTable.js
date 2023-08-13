@@ -163,22 +163,15 @@ const UsersTable = ({ searchTerm, isExport }) => {
 
 
     useEffect(() => {
-        console.log(allUsers);
+        dispatch(show());
         if (allUsers.length == 0) {
             dispatch(fetchALLUsers());
         }
-        console.log(allUsers);
     }, [dispatch]);
 
     useEffect(() => {
-        if (allUsers.length == 0) {
-            dispatch(show());
-            // dispatch(showError("Success!"));
-        } else {
-            setFilterUser(allUsers)
-            dispatch(hide());
-        }
-
+        setFilterUser(allUsers)
+        dispatch(hide());
     }, [allUsers]);
 
     useEffect(() => {

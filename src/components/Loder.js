@@ -13,7 +13,6 @@ export default function LoderComponent() {
     const message = useSelector(
         state => state.snack
     );
-    console.log(message);
     const { isLoading } = useSelector(
         state => state.loader
     );

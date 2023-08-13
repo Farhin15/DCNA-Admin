@@ -70,7 +70,6 @@ const AuthRegister = () => {
                 } else {
                     dispatch(showError(res?.message))
                 }
-                console.log("then", res)
             })
             .catch((error) => {
                 dispatch(hide());

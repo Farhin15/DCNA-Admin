@@ -78,8 +78,6 @@ const AuthResetPassword = () => {
 
                 setStatus({ success: false });
                 setSubmitting(false);
-                console.log(response);
-
                 dispatch(hide());
             })
 
@@ -114,7 +112,6 @@ const AuthResetPassword = () => {
                         ),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    console.log(values, setErrors, setStatus, setSubmitting);
                     try {
                         handleLogin(values, { setErrors, setStatus, setSubmitting })
                     } catch (err) {

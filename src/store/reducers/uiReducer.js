@@ -1,5 +1,4 @@
 const uiReducer = (state = {}, action) => {
-    debugger
     switch (action.type) {
         case "SNACKBAR_SUCCESS":
             return {

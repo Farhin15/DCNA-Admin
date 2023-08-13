@@ -43,20 +43,16 @@ export default function Activity({ isRefresh }) {
     const theme = useTheme();
     const [expanded, setExpanded] = React.useState('');
     const communications = useSelector(getAllCommunications);
-    console.log(communications);
     const apiStatus = useSelector(getLoading);
     const dispatch = useDispatch();
     const { id } = useParams();
     useEffect(() => {
-        console.log(communications);
         if (id) {
             dispatch(fetchALLCommunications(id));
         }
-        console.log(communications);
     }, [dispatch, id]);
 
     useEffect(() => {
-        // console.log(isRefresh);
         if (isRefresh) {
             dispatch(fetchALLCommunications(id));
         }

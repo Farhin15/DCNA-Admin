@@ -2,11 +2,9 @@ import axios from "axios";
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 let url = process.env.REACT_APP_API_BASE_URL
-console.log(url);
 // url = url.replace(/";/, '')
 const getHeaders = () => {
     let headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Y_TOKEN'))}` }
-    console.log(headers);
     return headers;
 }
 export const fetchALLTemplates = createAsyncThunk("template/getAPI", async () => {
@@ -17,7 +15,6 @@ export const fetchALLTemplates = createAsyncThunk("template/getAPI", async () =>
 export const fetchTemplateById = createAsyncThunk("template/getAPIById", async (id) => {
     let headers = getHeaders();
     const response = await axios.get(`${url}template/${id}/`, { headers });
-    console.log(response);
     return response.data;
 });
 

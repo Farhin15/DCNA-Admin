@@ -11,7 +11,6 @@ export default function SnackbarComponent() {
     const message = useSelector(
         state => state.snack
     );
-    console.log(message);
     const { snackbarMessage, successSnackbarOpen, errorSnackbarOpen } = useSelector(
         state => state.snack
     );

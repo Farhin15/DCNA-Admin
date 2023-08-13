@@ -12,7 +12,6 @@ export default function LoaderSlider() {
     const message = useSelector(
         state => state.loader
     );
-    console.log(message);
     const { isLoading } = useSelector(
         state => state.loader
     );

@@ -2,13 +2,10 @@ import axios from "axios";
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 let url = process.env.REACT_APP_API_BASE_URL
-console.log(url);
 // url = url.replace(/";/, '')
-console.log(localStorage.getItem('Y_TOKEN'));
 
 const getHeaders = () => {
     let headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Y_TOKEN'))}` }
-    console.log(headers);
     return headers;
 }
 export const fetchALLUsers = createAsyncThunk("user/getAPI", async () => {
@@ -19,7 +16,6 @@ export const fetchALLUsers = createAsyncThunk("user/getAPI", async () => {
 export const fetchUserById = createAsyncThunk("user/getAPIById", async (id) => {
     let headers = getHeaders();
     const response = await axios.get(`${url}user/${id}/`, { headers });
-    console.log(response);
     return response.data;
 });
 

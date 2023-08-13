@@ -88,7 +88,6 @@ const Communication = ({ close, requestDetail }) => {
         dispatch(fetchALLTemplates()).unwrap()
             .then((res) => {
                 dispatch(hide());
-                console.log(res);
                 setTemplateList(res)
             })
             .catch(() => {
@@ -109,7 +108,6 @@ const Communication = ({ close, requestDetail }) => {
                 // password: Yup.string().max(255).required('Password is required')
                 // })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    console.log(JSON.stringify(values));
                     try {
                         addCommunication(values)
                         setStatus({ success: false });

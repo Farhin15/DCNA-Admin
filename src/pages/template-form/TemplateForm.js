@@ -117,7 +117,6 @@ const Template = ({ id }) => {
                     // password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    console.log(JSON.stringify(values));
                     try {
                         addTemplate(values)
                         setStatus({ success: false });

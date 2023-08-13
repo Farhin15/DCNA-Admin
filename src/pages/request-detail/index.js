@@ -50,7 +50,6 @@ const RequestDetail = () => {
 
     const handleClose = (isSuccess) => {
         setOpen(false);
-        console.log(isSuccess);
         setIsRefresh(isSuccess)
     };
 
@@ -72,8 +71,6 @@ const RequestDetail = () => {
                 .unwrap()
                 .then((res) => {
                     dispatch(hide());
-
-                    console.log(res.data);
                     let data = res.data;
                     setReuestDetail(data)
                 })

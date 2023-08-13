@@ -67,7 +67,6 @@ const User = ({ id }) => {
                     } else {
                         dispatch(showError(res?.message))
                     }
-                    console.log("then", res)
                 })
                 .catch((err) => {
                     dispatch(hide());
@@ -125,7 +124,6 @@ const User = ({ id }) => {
                     // password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    console.log(JSON.stringify(values));
                     try {
                         addUser(values)
                         setStatus({ success: false });
