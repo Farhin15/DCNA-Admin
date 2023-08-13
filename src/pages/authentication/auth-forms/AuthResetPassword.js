@@ -31,6 +31,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { showError, showSuccess } from 'store/reducers/snackbarSlice';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -50,6 +51,8 @@ const AuthResetPassword = () => {
     const handleLogin = (event, { setErrors, setStatus, setSubmitting }) => {
         // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
         // navigate('/')
+        dispatch(show());
+
         axios
             .post(
                 process.env.REACT_APP_API_BASE_URL + 'reset-password/',
@@ -69,11 +72,14 @@ const AuthResetPassword = () => {
                 setSubmitting(false);
                 dispatch(showSuccess('Password reset successfully!'))
                 console.log(response);
+                dispatch(hide());
+
                 navigate('/login')
                 event.email = '';
             })
 
             .catch((err) => {
+                dispatch(hide());
                 dispatch(showError('Something went wrong!'))
                 setStatus({ success: false });
                 setErrors({ submit: err.message });

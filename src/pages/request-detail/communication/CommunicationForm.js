@@ -39,6 +39,7 @@ import { saveNewCommunication } from 'store/reducers/communicationSlice';
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
+import { hide, show } from 'store/reducers/loaderSlice';
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const Communication = ({ close, requestDetail }) => {
@@ -52,17 +53,24 @@ const Communication = ({ close, requestDetail }) => {
     const [selectedTemplate, setSelectedTemplate] = useState(null)
 
     const addCommunication = (val) => {
-        if (val.messages || val.template_id) {
+        if (val.message || val.template_id) {
+            dispatch(show());
+
             dispatch(saveNewCommunication(val))
                 .unwrap()
                 .then(() => {
+                    dispatch(hide());
+
                     dispatch(showSuccess("Message Sent Successfully!"));
                     close(true);
                     setTimeout(() => {
                         close(false);
                     }, 500);
                 })
-                .catch(() => dispatch(showError('Something went wrong!')));
+                .catch(() => {
+                    dispatch(hide());
+                    dispatch(showError('Something went wrong!'))
+                });
         } else {
             dispatch(showError('Select template or atleast write a message.'))
         }
@@ -72,15 +80,21 @@ const Communication = ({ close, requestDetail }) => {
         setInitValues({
             request_id: id,
             template_id: '',
-            messages: '',
+            message: '',
             recipient_name: `${requestDetail?.first_name} ${requestDetail?.last_name}`
         })
+        dispatch(show());
+
         dispatch(fetchALLTemplates()).unwrap()
             .then((res) => {
+                dispatch(hide());
                 console.log(res);
                 setTemplateList(res)
             })
-            .catch(() => dispatch(showError('Something went wrong!')))
+            .catch(() => {
+                dispatch(hide());
+                dispatch(showError('Something went wrong!'))
+            })
     }, [data])
 
     return (

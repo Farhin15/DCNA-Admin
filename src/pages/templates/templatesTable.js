@@ -205,9 +205,11 @@ const TemplatesTable = ({ searchTerm }) => {
             okText: 'Yes',
             okType: 'danger',
             onOk: () => {
+                dispatch(show());
                 dispatch(deleteTemplate(id))
                     .unwrap()
                     .then(() => {
+                        dispatch(hide());
                         dispatch(fetchALLTemplates());
                     })
                     .catch(() => dispatch(showError('Something went wrong!')));

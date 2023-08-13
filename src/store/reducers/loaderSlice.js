@@ -12,7 +12,6 @@ export const loaderSlice = createSlice({
             state.isLoading = true;
         },
         hide: (state, action) => {
-            console.log(state, action);
             state.isLoading = false;
         },
     },

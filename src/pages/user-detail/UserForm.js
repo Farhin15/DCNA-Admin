@@ -32,6 +32,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchUserById, saveNewUser, updateUser } from 'store/reducers/userSlice';
 import { showError, showSuccess } from 'store/reducers/snackbarSlice';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -42,18 +43,24 @@ const User = ({ id }) => {
     const [initValues, setInitValues] = useState(null)
 
     const addUser = (val) => {
+        dispatch(show());
         if (id) {
             dispatch(updateUser({ data: val, id: id }))
                 .unwrap()
                 .then(() => {
+                    dispatch(hide());
                     dispatch(showSuccess("User Updated successfully!"));
                     navigate("/users");
                 })
-                .catch((error) => dispatch(showError(error?.message ?? 'Something went wrong!')));
+                .catch((error) => {
+                    dispatch(hide());
+                    dispatch(showError(error?.message ?? 'Something went wrong!'))
+                });
         } else {
             dispatch(saveNewUser(val))
                 .unwrap()
                 .then((res) => {
+                    dispatch(hide());
                     if (res.success) {
                         dispatch(showSuccess("User Added successfully!"));
                         navigate("/users");
@@ -62,7 +69,10 @@ const User = ({ id }) => {
                     }
                     console.log("then", res)
                 })
-                .catch((error) => dispatch(showError(error?.message ?? 'Something went wrong!')));
+                .catch((error) => {
+                    dispatch(hide());
+                    dispatch(showError(error?.message ?? 'Something went wrong!'))
+                });
         }
     };
 
@@ -72,9 +82,11 @@ const User = ({ id }) => {
             if (data) {
                 setInitValues(data);
             } else {
+                dispatch(show());
                 dispatch(fetchUserById(id))
                     .unwrap()
                     .then((res) => {
+                        dispatch(hide());
                         data = res.user;
                         // let fetchData = {
                         //     first_name: data.name,
@@ -83,7 +95,10 @@ const User = ({ id }) => {
                         // }
                         setInitValues(data);
                     })
-                    .catch(error => dispatch(showError('Something went wrong!')));
+                    .catch(error => {
+                        dispatch(hide());
+                        dispatch(showError('Something went wrong!'))
+                    });
             }
         } else {
             setInitValues({

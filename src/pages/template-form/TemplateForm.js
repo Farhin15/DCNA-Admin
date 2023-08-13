@@ -32,6 +32,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchTemplateById, saveNewTemplate, updateTemplate } from 'store/reducers/templateSlice';
 import { showError, showSuccess } from 'store/reducers/snackbarSlice';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -42,22 +43,32 @@ const Template = ({ id }) => {
     const [initValues, setInitValues] = useState(null)
 
     const addTemplate = (val) => {
+        dispatch(show());
         if (id) {
             dispatch(updateTemplate({ data: val, id: id }))
                 .unwrap()
                 .then(() => {
+                    dispatch(hide());
                     dispatch(showSuccess("Template Updated Successfully!"));
                     navigate("/templates");
                 })
-                .catch(err => dispatch(showError("Template name is already exits or something went wrong!")))
+                .catch(err => {
+                    dispatch(hide());
+                    dispatch(showError("Template name is already exits or something went wrong!")
+                    )
+                })
         } else {
             dispatch(saveNewTemplate(val))
                 .unwrap()
                 .then(() => {
+                    dispatch(hide());
                     dispatch(showSuccess("Template Added Successfully!"));
                     navigate("/templates");
                 })
-                .catch(err => dispatch(showError("Template name is already exits or something went wrong!")));
+                .catch(err => {
+                    dispatch(hide());
+                    dispatch(showError("Template name is already exits or something went wrong!"))
+                });
         }
     };
 
@@ -67,9 +78,11 @@ const Template = ({ id }) => {
             if (data) {
                 setInitValues(data);
             } else {
+                dispatch(show());
                 dispatch(fetchTemplateById(id))
                     .unwrap()
                     .then((res) => {
+                        dispatch(hide());
                         data = res.template;
                         let fetchData = {
                             templatename: data.name,
@@ -78,7 +91,10 @@ const Template = ({ id }) => {
                         }
                         setInitValues(fetchData);
                     })
-                    .catch(error => dispatch(showError('Something went wrong!')));
+                    .catch(error => {
+                        dispatch(hide());
+                        dispatch(showError('Something went wrong!'))
+                    });
             }
         } else {
             setInitValues({

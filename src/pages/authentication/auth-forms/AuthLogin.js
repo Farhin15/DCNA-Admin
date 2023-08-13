@@ -31,6 +31,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { showError, showSuccess } from 'store/reducers/snackbarSlice';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -49,6 +50,7 @@ const AuthLogin = () => {
     const handleLogin = (event, { setErrors, setStatus, setSubmitting }) => {
         // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
         // navigate('/')
+        dispatch(show());
         axios
             .post(
                 process.env.REACT_APP_API_BASE_URL + 'sign-in/',
@@ -70,6 +72,7 @@ const AuthLogin = () => {
                 localStorage.setItem('Y_TOKEN', JSON.stringify(response.data.token));
                 localStorage.setItem('userName', event.username);
                 localStorage.setItem('user_id', response.data.user_id);
+                dispatch(hide());
                 // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
                 // if (response.data.success) {
                 // console.log(response.data.token);
@@ -84,6 +87,7 @@ const AuthLogin = () => {
             })
 
             .catch((err) => {
+                dispatch(hide());
                 setStatus({ success: false });
                 dispatch(showError('Something went wrong!'))
                 setErrors({ submit: err.message });

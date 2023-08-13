@@ -352,12 +352,17 @@ const UsersTable = ({ searchTerm, isExport }) => {
             okText: 'Yes',
             okType: 'danger',
             onOk: () => {
+                dispatch(show());
                 dispatch(deleteUser(id))
                     .unwrap()
                     .then(() => {
+                        dispatch(hide());
                         dispatch(fetchALLUsers());
                     })
-                    .catch(() => dispatch(showError('Something went wrong!')));
+                    .catch(() => {
+                        dispatch(hide());
+                        dispatch(showError('Something went wrong!'))
+                    });
             }
         })
     };
