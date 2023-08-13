@@ -54,7 +54,7 @@ const Template = ({ id }) => {
                 })
                 .catch(err => {
                     dispatch(hide());
-                    dispatch(showError("Template name is already exits or something went wrong!")
+                    dispatch(showError(err.message?.includes('409') ? 'Template name is already exits' : 'Something went wrong!')
                     )
                 })
         } else {
@@ -67,7 +67,7 @@ const Template = ({ id }) => {
                 })
                 .catch(err => {
                     dispatch(hide());
-                    dispatch(showError("Template name is already exits or something went wrong!"))
+                    dispatch(showError(err.message?.includes('409') ? 'Template name is already exits' : 'Something went wrong!'))
                 });
         }
     };

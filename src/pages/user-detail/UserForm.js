@@ -52,9 +52,9 @@ const User = ({ id }) => {
                     dispatch(showSuccess("User Updated successfully!"));
                     navigate("/users");
                 })
-                .catch((error) => {
+                .catch((wrr) => {
                     dispatch(hide());
-                    dispatch(showError(error?.message ?? 'Something went wrong!'))
+                    dispatch(showError(err.message?.includes('409') ? 'Email or Username is already exits' : 'Something went wrong!'))
                 });
         } else {
             dispatch(saveNewUser(val))
@@ -69,9 +69,9 @@ const User = ({ id }) => {
                     }
                     console.log("then", res)
                 })
-                .catch((error) => {
+                .catch((err) => {
                     dispatch(hide());
-                    dispatch(showError(error?.message ?? 'Something went wrong!'))
+                    dispatch(showError(err.message?.includes('409') ? 'Email or Username is already exits' : 'Something went wrong!'))
                 });
         }
     };

@@ -87,10 +87,11 @@ const AuthLogin = () => {
             })
 
             .catch((err) => {
+                console.log();
                 dispatch(hide());
                 setStatus({ success: false });
-                dispatch(showError('Something went wrong!'))
-                setErrors({ submit: err.message });
+                dispatch(showError(err.message?.includes('401') ? 'Invalid Username or Password.' : err.message?.includes('404') ? 'User dose not exists' : 'Something went wrong!'))
+                setErrors({ submit: err.message?.includes('401') ? 'Invalid Username or Password.' : err.message?.includes('404') ? 'User dose not exists' : 'Something went wrong!' });
                 setSubmitting(false);
             });
     };

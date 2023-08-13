@@ -68,14 +68,19 @@ const AuthResetPassword = () => {
                 }
             )
             .then((response) => {
+                if (response?.data?.message == 'Password reset successfully.') {
+                    dispatch(showSuccess('Password reset successfully!'))
+                    navigate('/login')
+                    event.email = '';
+                } else {
+                    dispatch(showError(response?.data?.message))
+                }
+
                 setStatus({ success: false });
                 setSubmitting(false);
-                dispatch(showSuccess('Password reset successfully!'))
                 console.log(response);
-                dispatch(hide());
 
-                navigate('/login')
-                event.email = '';
+                dispatch(hide());
             })
 
             .catch((err) => {
@@ -97,7 +102,7 @@ const AuthResetPassword = () => {
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    otp: Yup.string().max(255).required('OTP is required')
+                    otp: Yup.string().max(6, 'OTP must be at least 6 characters').required('OTP is required').min(6, 'OTP must be at least 6 characters')
                         .matches(
                             /^(?=.*[0-9])/,
                             "Must be a valid OTP"

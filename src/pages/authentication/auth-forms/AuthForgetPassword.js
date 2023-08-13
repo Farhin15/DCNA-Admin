@@ -67,11 +67,15 @@ const AuthForgetPassword = () => {
                 }
             )
             .then((response) => {
+                if (response?.data?.message == 'Password reset OTP sent successfully.') {
+                    dispatch(showSuccess('OTP has been sent to your email'))
+                    navigate('/reset-password')
+                    event.email = '';
+                } else {
+                    dispatch(showError(response?.data?.message))
+                }
                 setStatus({ success: false });
-                dispatch(showSuccess('OTP has been sent to your email'))
                 setSubmitting(false);
-                navigate('/reset-password')
-                event.email = '';
                 dispatch(hide());
             })
             .catch((err) => {
