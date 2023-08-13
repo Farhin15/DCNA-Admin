@@ -11,7 +11,6 @@ export default function SnackbarComponent() {
     const message = useSelector(
         state => state.snack
     );
-    console.log(message);
     const { snackbarMessage, successSnackbarOpen, errorSnackbarOpen } = useSelector(
         state => state.snack
     );
@@ -20,13 +19,15 @@ export default function SnackbarComponent() {
     }
 
     return (
-        <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            open={successSnackbarOpen || errorSnackbarOpen}
-            autoHideDuration={4000} onClose={handleClose}>
-            <Alert sx={{ color: '#ffffff' }} severity={successSnackbarOpen ? "success" : errorSnackbarOpen ? "error" : "info"} variant="filled" onClose={handleClose}>
-                {snackbarMessage ?? 'This is a message!'}
-            </Alert>
-        </Snackbar>
+        <>
+            {successSnackbarOpen || errorSnackbarOpen ? <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={successSnackbarOpen || errorSnackbarOpen}
+                autoHideDuration={4000} onClose={handleClose}>
+                <Alert sx={{ color: '#ffffff' }} severity={successSnackbarOpen ? "success" : errorSnackbarOpen ? "error" : "info"} variant="filled" onClose={handleClose}>
+                    {snackbarMessage ?? 'This is a message!'}
+                </Alert>
+            </Snackbar> : <></>}
+        </>
     );
 }

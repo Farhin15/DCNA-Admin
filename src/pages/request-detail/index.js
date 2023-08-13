@@ -31,6 +31,7 @@ import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
 import CommunicationForm from './communication/CommunicationForm.js'
 import { showError } from 'store/reducers/snackbarSlice';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 // ==============================|| REQUESTS ||============================== //
 
@@ -49,7 +50,6 @@ const RequestDetail = () => {
 
     const handleClose = (isSuccess) => {
         setOpen(false);
-        console.log(isSuccess);
         setIsRefresh(isSuccess)
     };
 
@@ -66,14 +66,18 @@ const RequestDetail = () => {
 
     useEffect(() => {
         if (id) {
+            dispatch(show());
             dispatch(fetchRequestById(id))
                 .unwrap()
                 .then((res) => {
-                    console.log(res.data);
+                    dispatch(hide());
                     let data = res.data;
                     setReuestDetail(data)
                 })
-                .catch(error => dispatch(showError('Something went wrong!')));
+                .catch(error => {
+                    dispatch(hide());
+                    dispatch(showError('Something went wrong!'))
+                });
         }
     }, [])
 

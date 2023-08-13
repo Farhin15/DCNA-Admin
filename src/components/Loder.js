@@ -4,13 +4,14 @@ import { Icon } from "@material-ui/core";
 import { clear } from "store/reducers/snackbarSlice";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import Loader from "./Loader";
+import './loader.css'
+import { CircularProgress } from '@material-ui/core';
 
-export default function LoaderSlider() {
+export default function LoderComponent() {
     const dispatch = useDispatch();
 
     const message = useSelector(
-        state => state.loader
+        state => state.snack
     );
     const { isLoading } = useSelector(
         state => state.loader
@@ -19,5 +20,14 @@ export default function LoaderSlider() {
         dispatch(clear());
     }
 
-    return isLoading ? <Loader /> : <></>
+    return (
+        <>
+            {isLoading ? <div className="loader">
+                <div className="loader-center">
+                    <CircularProgress
+                        size={70} />
+                </div>
+            </div> : <></>}
+        </>
+    );
 }

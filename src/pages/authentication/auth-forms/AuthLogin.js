@@ -31,6 +31,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { showError, showSuccess } from 'store/reducers/snackbarSlice';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -49,6 +50,7 @@ const AuthLogin = () => {
     const handleLogin = (event, { setErrors, setStatus, setSubmitting }) => {
         // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
         // navigate('/')
+        dispatch(show());
         axios
             .post(
                 process.env.REACT_APP_API_BASE_URL + 'sign-in/',
@@ -66,27 +68,26 @@ const AuthLogin = () => {
             .then((response) => {
                 setStatus({ success: false });
                 setSubmitting(false);
-                console.log(response);
                 localStorage.setItem('Y_TOKEN', JSON.stringify(response.data.token));
                 localStorage.setItem('userName', event.username);
                 localStorage.setItem('user_id', response.data.user_id);
+                dispatch(hide());
                 // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
                 // if (response.data.success) {
-                // console.log(response.data.token);
                 navigate('/')
                 dispatch(showSuccess('Logged in successfully!'))
                 // }
                 // localStorage.getItem('Y_TOKEN') ? navigate('/') : <h1>hii</h1>;
                 // const data = localStorage.getItem('Y_TOKEN');
-                // console.log(data);
                 event.email = '';
                 event.password = '';
             })
 
             .catch((err) => {
+                dispatch(hide());
                 setStatus({ success: false });
-                dispatch(showError('Something went wrong!'))
-                setErrors({ submit: err.message });
+                dispatch(showError(err.message?.includes('401') ? 'Invalid Username or Password.' : err.message?.includes('404') ? 'User dose not exists' : 'Something went wrong!'))
+                setErrors({ submit: err.message?.includes('401') ? 'Invalid Username or Password.' : err.message?.includes('404') ? 'User dose not exists' : 'Something went wrong!' });
                 setSubmitting(false);
             });
     };
@@ -108,7 +109,6 @@ const AuthLogin = () => {
                         )
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    console.log(values, setErrors, setStatus, setSubmitting);
                     try {
                         handleLogin(values, { setErrors, setStatus, setSubmitting })
                     } catch (err) {
@@ -177,7 +177,7 @@ const AuthLogin = () => {
                                 </Stack>
                             </Grid>
 
-                            <Grid item xs={12} sx={{ mt: -1 }}>
+                            {/* <Grid item xs={12} sx={{ mt: -1 }}>
                                 <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                                     <FormControlLabel
                                         control={
@@ -195,7 +195,7 @@ const AuthLogin = () => {
                                         Forgot Password?
                                     </Link>
                                 </Stack>
-                            </Grid>
+                            </Grid> */}
                             {errors.submit && (
                                 <Grid item xs={12}>
                                     <FormHelperText error>{errors.submit}</FormHelperText>

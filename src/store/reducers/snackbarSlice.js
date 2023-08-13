@@ -17,7 +17,6 @@ export const snackbarSlice = createSlice({
             state.snackbarMessage = action.payload
         },
         showError: (state, action) => {
-            console.log(state, action);
             state.errorSnackbarOpen = true;
             state.successSnackbarOpen = false;
             state.snackbarMessage = action.payload

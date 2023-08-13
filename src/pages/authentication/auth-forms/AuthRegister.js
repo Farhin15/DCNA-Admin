@@ -33,6 +33,7 @@ import { saveNewUser } from 'store/reducers/userSlice';
 import { useDispatch } from 'react-redux';
 import { showError, showSuccess } from 'store/reducers/snackbarSlice';
 import { useNavigate } from 'react-router-dom';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -56,18 +57,22 @@ const AuthRegister = () => {
     };
 
     const addUser = (val) => {
+        dispatch(show());
+
         dispatch(saveNewUser(val))
             .unwrap()
             .then((res) => {
+                dispatch(hide());
+
                 if (res.success) {
                     dispatch(showSuccess("User Added successfully!"));
                     navigate("/login");
                 } else {
                     dispatch(showError(res?.message))
                 }
-                console.log("then", res)
             })
             .catch((error) => {
+                dispatch(hide());
                 dispatch(showError(error?.message ?? 'Something went wrong!'))
             });
     };

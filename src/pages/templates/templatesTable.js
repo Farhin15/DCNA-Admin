@@ -114,7 +114,6 @@ const TemplatesTable = ({ searchTerm }) => {
             multiple: 3,
         },
         render: (text) => {
-            console.log(dataIndex);
             if (dataIndex == 'content') {
                 return <span dangerouslySetInnerHTML={{ __html: text }}></span >;
             } else {
@@ -162,22 +161,15 @@ const TemplatesTable = ({ searchTerm }) => {
 
 
     useEffect(() => {
-        console.log(allTemplates);
+        dispatch(show());
         if (allTemplates.length == 0) {
             dispatch(fetchALLTemplates());
         }
-        console.log(allTemplates);
     }, [dispatch]);
 
     useEffect(() => {
-        if (allTemplates.length == 0) {
-            dispatch(show());
-            // dispatch(showError("Success!"));
-        } else {
-            setFilterTemplates(allTemplates)
-            dispatch(hide());
-        }
-
+        setFilterTemplates(allTemplates)
+        dispatch(hide());
     }, [allTemplates]);
 
     useEffect(() => {
@@ -205,9 +197,11 @@ const TemplatesTable = ({ searchTerm }) => {
             okText: 'Yes',
             okType: 'danger',
             onOk: () => {
+                dispatch(show());
                 dispatch(deleteTemplate(id))
                     .unwrap()
                     .then(() => {
+                        dispatch(hide());
                         dispatch(fetchALLTemplates());
                     })
                     .catch(() => dispatch(showError('Something went wrong!')));

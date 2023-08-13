@@ -31,6 +31,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { showError, showSuccess } from 'store/reducers/snackbarSlice';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -50,6 +51,8 @@ const AuthResetPassword = () => {
     const handleLogin = (event, { setErrors, setStatus, setSubmitting }) => {
         // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
         // navigate('/')
+        dispatch(show());
+
         axios
             .post(
                 process.env.REACT_APP_API_BASE_URL + 'reset-password/',
@@ -65,15 +68,21 @@ const AuthResetPassword = () => {
                 }
             )
             .then((response) => {
+                if (response?.data?.message == 'Password reset successfully.') {
+                    dispatch(showSuccess('Password reset successfully!'))
+                    navigate('/login')
+                    event.email = '';
+                } else {
+                    dispatch(showError(response?.data?.message))
+                }
+
                 setStatus({ success: false });
                 setSubmitting(false);
-                dispatch(showSuccess('Password reset successfully!'))
-                console.log(response);
-                navigate('/login')
-                event.email = '';
+                dispatch(hide());
             })
 
             .catch((err) => {
+                dispatch(hide());
                 dispatch(showError('Something went wrong!'))
                 setStatus({ success: false });
                 setErrors({ submit: err.message });
@@ -91,7 +100,7 @@ const AuthResetPassword = () => {
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    otp: Yup.string().max(255).required('OTP is required')
+                    otp: Yup.string().max(6, 'OTP must be at least 6 characters').required('OTP is required').min(6, 'OTP must be at least 6 characters')
                         .matches(
                             /^(?=.*[0-9])/,
                             "Must be a valid OTP"
@@ -103,7 +112,6 @@ const AuthResetPassword = () => {
                         ),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    console.log(values, setErrors, setStatus, setSubmitting);
                     try {
                         handleLogin(values, { setErrors, setStatus, setSubmitting })
                     } catch (err) {

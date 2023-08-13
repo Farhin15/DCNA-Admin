@@ -163,22 +163,15 @@ const UsersTable = ({ searchTerm, isExport }) => {
 
 
     useEffect(() => {
-        console.log(allUsers);
+        dispatch(show());
         if (allUsers.length == 0) {
             dispatch(fetchALLUsers());
         }
-        console.log(allUsers);
     }, [dispatch]);
 
     useEffect(() => {
-        if (allUsers.length == 0) {
-            dispatch(show());
-            // dispatch(showError("Success!"));
-        } else {
-            setFilterUser(allUsers)
-            dispatch(hide());
-        }
-
+        setFilterUser(allUsers)
+        dispatch(hide());
     }, [allUsers]);
 
     useEffect(() => {
@@ -352,12 +345,17 @@ const UsersTable = ({ searchTerm, isExport }) => {
             okText: 'Yes',
             okType: 'danger',
             onOk: () => {
+                dispatch(show());
                 dispatch(deleteUser(id))
                     .unwrap()
                     .then(() => {
+                        dispatch(hide());
                         dispatch(fetchALLUsers());
                     })
-                    .catch(() => dispatch(showError('Something went wrong!')));
+                    .catch(() => {
+                        dispatch(hide());
+                        dispatch(showError('Something went wrong!'))
+                    });
             }
         })
     };

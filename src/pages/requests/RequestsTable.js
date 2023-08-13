@@ -234,22 +234,15 @@ export default function RequestsTable({ searchTerm, isExport }) {
     };
 
     useEffect(() => {
+        dispatch(show());
         if (allRequests.length == 0) {
             dispatch(fetchALLRequests());
-            // dispatch(showError("Success!"));
         }
-
     }, [dispatch]);
 
     useEffect(() => {
-        if (allRequests.length == 0) {
-            dispatch(show());
-            // dispatch(showError("Success!"));
-        } else {
-            setFilterRequests(allRequests);
-            dispatch(hide());
-        }
-
+        setFilterRequests(allRequests);
+        dispatch(hide());
     }, [allRequests]);
 
     useEffect(() => {

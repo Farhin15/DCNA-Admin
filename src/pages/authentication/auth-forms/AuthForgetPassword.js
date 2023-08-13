@@ -31,6 +31,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { showError, showSuccess } from 'store/reducers/snackbarSlice';
+import { hide, show } from 'store/reducers/loaderSlice';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -50,6 +51,7 @@ const AuthForgetPassword = () => {
     const handleLogin = (event, { setErrors, setStatus, setSubmitting }) => {
         // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
         // navigate('/')
+        dispatch(show());
         axios
             .post(
                 process.env.REACT_APP_API_BASE_URL + 'forgot-password/',
@@ -65,17 +67,23 @@ const AuthForgetPassword = () => {
                 }
             )
             .then((response) => {
+                if (response?.data?.message == 'Password reset OTP sent successfully.') {
+                    dispatch(showSuccess('OTP has been sent to your email'))
+                    navigate('/reset-password')
+                    event.email = '';
+                } else {
+                    dispatch(showError(response?.data?.message))
+                }
                 setStatus({ success: false });
-                dispatch(showSuccess('OTP has been sent to your email'))
                 setSubmitting(false);
-                navigate('/reset-password')
-                event.email = '';
+                dispatch(hide());
             })
             .catch((err) => {
                 setStatus({ success: false });
                 dispatch(showError('Something went wrong!'))
                 setErrors({ submit: err.message });
                 setSubmitting(false);
+                dispatch(hide());
             });
     };
 
@@ -89,7 +97,6 @@ const AuthForgetPassword = () => {
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    console.log(values, setErrors, setStatus, setSubmitting);
                     try {
                         handleLogin(values, { setErrors, setStatus, setSubmitting })
                     } catch (err) {
