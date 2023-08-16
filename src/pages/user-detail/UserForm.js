@@ -46,7 +46,6 @@ const User = ({ id }) => {
         dispatch(show());
         if (id) {
             // const { password, rest } = val;
-            debugger
             dispatch(updateUser({ data: val, id: id }))
                 .unwrap()
                 .then(() => {

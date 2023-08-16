@@ -9,7 +9,8 @@ import { hide, show } from 'store/reducers/loaderSlice';
 import { Sorter } from 'common/sorter';
 import * as XLSX from 'xlsx';
 import * as FileSaver from "file-saver";
-import { showError } from 'store/reducers/snackbarSlice';
+import { showError, showSuccess } from 'store/reducers/snackbarSlice';
+import moment from "moment";
 
 const UsersTable = ({ searchTerm, isExport }) => {
     const allUsers = useSelector(getAllUsers);
@@ -72,7 +73,7 @@ const UsersTable = ({ searchTerm, isExport }) => {
                     >
                         Reset
                     </Button>
-                    <Button
+                    {/* <Button
                         type="link"
                         size="small"
                         onClick={() => {
@@ -84,7 +85,7 @@ const UsersTable = ({ searchTerm, isExport }) => {
                         }}
                     >
                         Filter
-                    </Button>
+                    </Button> */}
                     <Button
                         type="link"
                         size="small"
@@ -97,6 +98,7 @@ const UsersTable = ({ searchTerm, isExport }) => {
                 </Space>
             </div>
         ),
+        width: '15%',
         filterIcon: (filtered) => (
             <SearchOutlined
                 style={{
@@ -116,7 +118,7 @@ const UsersTable = ({ searchTerm, isExport }) => {
             multiple: 3,
         },
         render: (text) =>
-            text
+            dataIndex === 'date_created' ? moment(text).format('yyyy-MM-DD hh:mm') : text
     });
     const columns = [
         {
@@ -149,6 +151,8 @@ const UsersTable = ({ searchTerm, isExport }) => {
         {
             title: 'Date Created',
             dataIndex: 'date_created',
+            with: '30%',
+            ...getColumnSearchProps('date_created')
         },
 
         {
@@ -353,11 +357,12 @@ const UsersTable = ({ searchTerm, isExport }) => {
                 dispatch(show());
                 dispatch(deleteUser(id))
                     .unwrap()
-                    .then(() => {
+                    .then((res) => {
+                        dispatch(showSuccess('User deleted successfully!'))
                         dispatch(hide());
                         dispatch(fetchALLUsers());
                     })
-                    .catch(() => {
+                    .catch((err) => {
                         dispatch(hide());
                         dispatch(showError('Something went wrong!'))
                     });

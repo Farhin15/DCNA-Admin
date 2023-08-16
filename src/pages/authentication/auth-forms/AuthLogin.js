@@ -103,10 +103,10 @@ const AuthLogin = () => {
                 validationSchema={Yup.object().shape({
                     username: Yup.string().max(255).required('Email is required'),
                     password: Yup.string().max(255).required('Password is required')
-                        .matches(
-                            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
-                            "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
-                        )
+                    // .matches(
+                    //     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+                    //     "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                    // )
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {

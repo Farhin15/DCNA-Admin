@@ -15,7 +15,8 @@ const useStyles = makeStyles({
 
 export default function Message({ message }) {
     const classes = useStyles();
-    const dateForamt = moment(message?.timestamp).format('MMMM Do YYYY, h:mm a')
+    // const dateForamt = moment(message?.timestamp).format('MMMM Do YYYY, h:mm a')
+    const dateForamt = moment(message?.timestamp).format('yyyy-MM-DD hh:mm');
     return (
         // <Card className={classes.root}>
         <Paper variant="outlined">

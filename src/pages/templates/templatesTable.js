@@ -7,7 +7,8 @@ import { Button, Input, Space, Table, Modal } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import { hide, show } from 'store/reducers/loaderSlice';
 import { Sorter } from 'common/sorter';
-import { showError } from 'store/reducers/snackbarSlice';
+import { showError, showSuccess } from 'store/reducers/snackbarSlice';
+import moment from "moment";
 
 const TemplatesTable = ({ searchTerm }) => {
     const allTemplates = useSelector(getAllTemplates);
@@ -116,8 +117,10 @@ const TemplatesTable = ({ searchTerm }) => {
         render: (text) => {
             if (dataIndex == 'content') {
                 return <span dangerouslySetInnerHTML={{ __html: text }}></span >;
+            }
+            if (dataIndex == 'date_created') {
+                return moment(text).format('yyyy-MM-DD hh:mm')
             } else {
-
                 return text;
             }
         }
@@ -201,6 +204,7 @@ const TemplatesTable = ({ searchTerm }) => {
                 dispatch(deleteTemplate(id))
                     .unwrap()
                     .then(() => {
+                        dispatch(showSuccess('Template deleted successfully!'))
                         dispatch(hide());
                         dispatch(fetchALLTemplates());
                     })

@@ -12,6 +12,7 @@ import { hide, show } from 'store/reducers/loaderSlice';
 import { Sorter } from 'common/sorter';
 import * as XLSX from 'xlsx';
 import * as FileSaver from "file-saver";
+import moment from "moment";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -111,6 +112,7 @@ export default function RequestsTable({ searchTerm, isExport }) {
                 }}
             />
         ),
+        width: dataIndex == 'date_created' ? '20%' : 'auto',
         onFilter: (value, record) =>
             record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase()),
         onFilterDropdownOpenChange: (visible) => {
@@ -127,9 +129,10 @@ export default function RequestsTable({ searchTerm, isExport }) {
                 <Link component={RouterLink} to={`/requests/request-detail/${text}`}>
                     {text}
                 </Link>
-            ) : (
-                text
-            ),
+            ) :
+                dataIndex === 'date_created' ?
+                    moment(text).format('yyyy-MM-DD hh:mm') :
+                    text
     });
 
     const columns = [
