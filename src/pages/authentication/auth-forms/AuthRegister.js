@@ -101,7 +101,7 @@ const AuthRegister = () => {
                             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
                             "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
                         ),
-                    address: Yup.string().max(255).required('Address is required'),
+                    // address: Yup.string().max(255).required('Address is required'),
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
@@ -207,7 +207,7 @@ const AuthRegister = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="address-signup">Address*</InputLabel>
+                                    <InputLabel htmlFor="address-signup">Address</InputLabel>
                                     <OutlinedInput
                                         fullWidth
                                         error={Boolean(touched.address && errors.address)}

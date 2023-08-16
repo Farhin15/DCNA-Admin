@@ -45,6 +45,8 @@ const User = ({ id }) => {
     const addUser = (val) => {
         dispatch(show());
         if (id) {
+            // const { password, rest } = val;
+            debugger
             dispatch(updateUser({ data: val, id: id }))
                 .unwrap()
                 .then(() => {
@@ -120,8 +122,8 @@ const User = ({ id }) => {
                     first_name: Yup.string().max(255).required('First Name is required'),
                     last_name: Yup.string().max(255).required('Last Name is required'),
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    address: Yup.string().max(255).required('Address is required'),
-                    // password: Yup.string().max(255).required('Password is required')
+                    // address: Yup.string().max(255).required('Address is required'),
+                    password: !id ? Yup.string().max(255).required('Password is required') : ''
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
@@ -223,7 +225,7 @@ const User = ({ id }) => {
                                     )}
                                 </Stack>
                             </Grid>
-                            {/* <Grid item xs={12}>
+                            {!id ? <Grid item xs={12}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="password">Password*</InputLabel>
                                     <OutlinedInput
@@ -243,10 +245,10 @@ const User = ({ id }) => {
                                         </FormHelperText>
                                     )}
                                 </Stack>
-                            </Grid> */}
+                            </Grid> : <></>}
                             <Grid item xs={12}>
                                 <Stack spacing={1}>
-                                    <InputLabel htmlFor="address">Address*</InputLabel>
+                                    <InputLabel htmlFor="address">Address</InputLabel>
                                     <OutlinedInput
                                         id="address"
                                         type="address"

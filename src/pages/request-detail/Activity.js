@@ -114,10 +114,13 @@ export default function Activity({ isRefresh }) {
                     </Box>
                     <TabPanel value={value} index={0} dir={theme.direction}>
                         <Stack spacing={2} sx={{ m: 2 }}>
-                            <Typography variant="h5">Customer Communication,</Typography>
+                            <Typography variant="h5">Customer Communication</Typography>
                             {communications?.length ? communications?.map((item, index) => {
                                 return <Message key={index} message={item} />
-                            }) : <></>}
+                            }) :
+                                <Typography>
+                                    No communication found.
+                                </Typography>}
                         </Stack>
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>

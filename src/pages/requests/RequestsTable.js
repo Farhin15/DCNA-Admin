@@ -213,6 +213,7 @@ export default function RequestsTable({ searchTerm, isExport }) {
         {
             title: 'Date Created',
             dataIndex: 'date_created',
+            ...getColumnSearchProps('date_created')
         },
         {
             title: 'Source',
