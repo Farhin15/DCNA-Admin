@@ -147,6 +147,11 @@ const UsersTable = ({ searchTerm, isExport }) => {
             ...getColumnSearchProps('address')
         },
         {
+            title: 'Date Created',
+            dataIndex: 'date_created',
+        },
+
+        {
             title: 'Actions',
             dataIndex: 'action',
             width: '10%',
