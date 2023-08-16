@@ -122,7 +122,11 @@ const User = ({ id }) => {
                     last_name: Yup.string().max(255).required('Last Name is required'),
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                     // address: Yup.string().max(255).required('Address is required'),
-                    password: !id ? Yup.string().max(255).required('Password is required') : ''
+                    password: !id ? Yup.string().max(255).required('Password is required')
+                        .matches(
+                            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+                            "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                        ) : ''
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
