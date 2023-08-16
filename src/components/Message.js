@@ -38,10 +38,11 @@ export default function Message({ message }) {
                     {message?.template_id?.name}
                 </Typography> */}
 
-                {/* <Typography variant="body1" color="textSecondary" component="p">
-                    {message?.message ?? message?.template_id?.description
-                        ?? ""}
-                </Typography> */}
+                <Typography sx={{ mt: 2 }} variant="body1" color="textSecondary" component="p">
+                    {/* {message?.message ?? message?.template_id?.description
+                        ?? ""} */}
+                    {message?.message ?? ""}
+                </Typography>
                 <Grid item >
 
                     <span dangerouslySetInnerHTML={{ __html: message?.template_id?.content }}></span >
