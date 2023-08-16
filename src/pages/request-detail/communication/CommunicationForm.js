@@ -81,7 +81,7 @@ const Communication = ({ close, requestDetail }) => {
             request_id: id,
             template_id: '',
             message: '',
-            recipient_name: `${requestDetail?.first_name} ${requestDetail?.last_name}`
+            recipient_name: `${localStorage.getItem('userName')}`
         })
         dispatch(show());
 
