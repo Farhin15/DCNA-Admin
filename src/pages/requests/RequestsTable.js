@@ -112,7 +112,7 @@ export default function RequestsTable({ searchTerm, isExport }) {
                 }}
             />
         ),
-        width: dataIndex == 'date_created' ? '20%' : 'auto',
+        width: dataIndex == 'date_created' || dataIndex == 'days_left' || dataIndex == 'request_type' ? '20%' : '10%',
         onFilter: (value, record) =>
             record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase()),
         onFilterDropdownOpenChange: (visible) => {
@@ -139,39 +139,7 @@ export default function RequestsTable({ searchTerm, isExport }) {
         {
             title: 'Id',
             dataIndex: '_id',
-            width: '30%',
             render: (text) => <a>{text}</a>,
-            // filters: [
-            //     {
-            //         text: 'Joe',
-            //         value: 'Joe',
-            //     },
-            //     {
-            //         text: 'Jim',
-            //         value: 'Jim',
-            //     },
-            //     {
-            //         text: 'Submenu',
-            //         value: 'Submenu',
-            //         children: [
-            //             {
-            //                 text: 'Green',
-            //                 value: 'Green',
-            //             },
-            //             {
-            //                 text: 'Black',
-            //                 value: 'Black',
-            //             },
-            //         ],
-            //     },
-            // ],
-            // specify the condition of filtering result
-            // here is that finding the name started with `value`
-            // render: (text) => {
-            //     <Link component={RouterLink} to={`/request-detail/${text}`}>
-            //         {text}
-            //     </Link>
-            // },
             onFilter: (value, record) => record.name.indexOf(value) === 0,
             ...getColumnSearchProps('_id')
         },

@@ -27,11 +27,11 @@ const Requests = () => {
         }, 500);
     }
     return (
-        <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+        <Grid container rowSpacing={0} columnSpacing={2.75}>
             <Grid item xs={12} md={12} lg={12}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography variant="h5">Requests</Typography>
+                        {/* <Typography variant="h5">Requests</Typography> */}
                     </Grid>
                     <Grid item>
                         <Grid container columnSpacing={0.5} alignItems="center" justifyContent="end">
@@ -92,7 +92,7 @@ const Requests = () => {
                                         size="medium"
                                         type="submit"
                                         variant="contained"
-                                        color="primary"
+                                        color="secondary"
                                         onClick={ExportData}
                                     >
                                         {/* <IconButton size="small" sx={{ color: '#FFFFFF' }} variant="contained" shape="rounded"> */}

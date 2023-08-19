@@ -34,7 +34,7 @@ const Users = () => {
             <Grid item xs={12} md={12} lg={12}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography variant="h5">Users</Typography>
+                        {/* <Typography variant="h5">Users</Typography> */}
                     </Grid>
                     <Grid item>
                         <Grid container columnSpacing={0.5} alignItems="center" justifyContent="end">
@@ -59,10 +59,10 @@ const Users = () => {
                                         size="medium"
                                         type="submit"
                                         variant="contained"
-                                        color="primary"
+                                        color="secondary"
                                         onClick={() => navigate('/users/user-detail', { replace: true })}
                                     >
-                                        Add User
+                                        New User
                                     </Button>
                                 </AnimateButton>
                             </Grid>
@@ -78,7 +78,7 @@ const Users = () => {
                                         size="medium"
                                         type="submit"
                                         variant="contained"
-                                        color="primary"
+                                        color="secondary"
                                         onClick={ExportData}
                                     >
                                         {/* <IconButton size="small" sx={{ color: '#FFFFFF' }} variant="contained" shape="rounded"> */}

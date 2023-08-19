@@ -125,7 +125,7 @@ const RequestDetail = () => {
                                         size="medium"
                                         type="submit"
                                         variant="contained"
-                                        color="primary"
+                                        color="secondary"
                                         onClick={handleClickOpen}
                                     >
                                         Customer Communication
@@ -157,9 +157,9 @@ const RequestDetail = () => {
                 </Grid>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography component={Link} to="/requests" variant="label" sx={{ textDecoration: 'none' }} color="primary">
+                        {/* <Typography component={Link} to="/requests" variant="label" sx={{ textDecoration: 'none' }} color="primary">
                             Requests
-                        </Typography>
+                        </Typography> */}
                     </Grid>
                     {/* <Grid item /> */}
                 </Grid>

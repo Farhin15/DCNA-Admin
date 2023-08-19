@@ -30,7 +30,7 @@ const MainRoutes = {
     element: <AuthGuard component={<MainLayout />} />,
     children: [
         {
-            path: '/',
+            path: 'requests',
             element: <AuthGuard component={<Requests />} />
         },
         {
@@ -62,10 +62,10 @@ const MainRoutes = {
             path: 'icons/ant',
             element: <AntIcons />
         },
-        {
-            path: 'requests',
-            element: <AuthGuard component={<Requests />} />
-        },
+        // {
+        //     path: 'requests',
+        //     element: <AuthGuard component={<Requests />} />
+        // },
         {
             path: 'requests/request-detail/:id',
             element: <AuthGuard component={<RequestDetail />} />

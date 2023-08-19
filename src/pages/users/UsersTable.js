@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from "file-saver";
 import { showError, showSuccess } from 'store/reducers/snackbarSlice';
 import moment from "moment";
+import { ButtonBase } from '@mui/material';
 
 const UsersTable = ({ searchTerm, isExport }) => {
     const allUsers = useSelector(getAllUsers);
@@ -162,8 +163,22 @@ const UsersTable = ({ searchTerm, isExport }) => {
             render: (item, record) => {
                 return (
                     <>
-                        <EditOutlined onClick={() => handleEditUser(record._id)} style={{ marginRight: 8 }} />
-                        <DeleteOutlined onClick={() => handleDeleteUser(record._id)} style={{ color: "red" }} />
+                        <ButtonBase
+                            sx={{
+                                p: 0.25,
+                            }}
+                            aria-label="Edit User"
+                            onClick={() => handleEditUser(record._id)}
+                        ><EditOutlined /></ButtonBase>
+                        <ButtonBase
+                            sx={{
+                                color: "red",
+                                p: 0.25,
+                            }}
+                            aria-label="Delete User"
+                            onClick={() => handleDeleteUser(record._id)}
+                        >
+                            <DeleteOutlined /></ButtonBase>
                     </>
                 )
             }
@@ -350,7 +365,7 @@ const UsersTable = ({ searchTerm, isExport }) => {
 
     const handleDeleteUser = (id) => {
         Modal.confirm({
-            title: 'Are you sure, you want  to delete this category?',
+            title: 'Are you sure, you want  to delete this User?',
             okText: 'Yes',
             okType: 'danger',
             onOk: () => {

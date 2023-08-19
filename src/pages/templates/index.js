@@ -25,7 +25,7 @@ const Templates = () => {
             <Grid item xs={12} md={12} lg={12}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography variant="h5">Templates</Typography>
+                        {/* <Typography variant="h5">Templates</Typography> */}
                     </Grid>
                     <Grid item>
                         <Grid container columnSpacing={0.5} alignItems="center" justifyContent="end">
@@ -45,7 +45,7 @@ const Templates = () => {
                                         size="medium"
                                         type="submit"
                                         variant="contained"
-                                        color="primary"
+                                        color="secondary"
                                         onClick={() => navigate('/templates/detail', { replace: true })}
                                     >
                                         New Template

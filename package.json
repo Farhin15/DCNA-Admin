@@ -61,7 +61,7 @@
         "yup": "^0.32.11"
     },
     "scripts": {
-        "start": "env-cmd -f .env.local react-scripts start --host=0.0.0.0",
+        "start": "env-cmd -f .env.local react-scripts start --port=3003 --host=0.0.0.0",
         "build": "env-cmd -f .env.local react-scripts build",
         "build:local": "env-cmd -f .env.local react-scripts build",
         "test": "react-scripts test",

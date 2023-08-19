@@ -9,6 +9,8 @@ import { hide, show } from 'store/reducers/loaderSlice';
 import { Sorter } from 'common/sorter';
 import { showError, showSuccess } from 'store/reducers/snackbarSlice';
 import moment from "moment";
+import { ButtonBase } from '@mui/material';
+import ConfirmDialog from 'components/ConfirmDialog';
 
 const TemplatesTable = ({ searchTerm }) => {
     const allTemplates = useSelector(getAllTemplates);
@@ -154,8 +156,24 @@ const TemplatesTable = ({ searchTerm }) => {
             render: (item, record) => {
                 return (
                     <>
-                        <EditOutlined onClick={() => handleEditTemplate(record._id)} style={{ marginRight: 8 }} />
-                        <DeleteOutlined onClick={() => handleDeleteTemplate(record._id)} style={{ color: "red" }} />
+                        <ButtonBase
+                            sx={{
+                                p: 0.25,
+                            }}
+                            aria-label="Edit Template"
+                            onClick={() => handleEditTemplate(record._id)}
+                        ><EditOutlined /></ButtonBase>
+                        <ButtonBase
+                            sx={{
+                                color: "red",
+                                p: 0.25,
+                            }}
+                            aria-label="Delete Template"
+                            onClick={() => handleDeleteTemplate(record._id)}
+                        >
+                            <DeleteOutlined /></ButtonBase>
+                        {/* <EditOutlined onClick={() => handleEditTemplate(record._id)} style={{ marginRight: 8 }} />
+                        <DeleteOutlined onClick={() => handleDeleteTemplate(record._id)} style={{ color: "red" }} /> */}
                     </>
                 )
             }
@@ -196,7 +214,7 @@ const TemplatesTable = ({ searchTerm }) => {
 
     const handleDeleteTemplate = (id) => {
         Modal.confirm({
-            title: 'Are you sure, you want  to delete this category?',
+            title: 'Are you sure, you want  to delete this Template?',
             okText: 'Yes',
             okType: 'danger',
             onOk: () => {
@@ -225,6 +243,7 @@ const TemplatesTable = ({ searchTerm }) => {
         ) : (
             <>
                 <Table columns={columns} dataSource={filterTemplates} />
+                {/* <ConfirmDialog /> */}
             </>
         );
 

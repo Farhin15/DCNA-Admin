@@ -216,7 +216,7 @@ const Template = ({ id }) => {
                                                 fullWidth
                                                 size="medium"
                                                 type="reset"
-                                                variant="contained"
+                                                variant="outlined"
                                                 color="secondary"
                                                 onClick={() => navigate('/templates', { replace: true })}
                                             >
@@ -236,7 +236,7 @@ const Template = ({ id }) => {
                                                 size="medium"
                                                 type="submit"
                                                 variant="contained"
-                                                color="primary"
+                                                color="secondary"
                                             >
                                                 {id ? 'Update' : 'Add'} Template
                                             </Button>

@@ -217,7 +217,7 @@ const Communication = ({ close, requestDetail }) => {
                                                 fullWidth
                                                 size="medium"
                                                 type="reset"
-                                                variant="contained"
+                                                variant="outlined"
                                                 color="secondary"
                                                 onClick={() => close(false)}
                                             >
@@ -237,7 +237,7 @@ const Communication = ({ close, requestDetail }) => {
                                                 size="medium"
                                                 type="submit"
                                                 variant="contained"
-                                                color="primary"
+                                                color="secondary"
                                             >
                                                 Submit
                                             </Button>

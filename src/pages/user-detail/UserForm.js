@@ -238,7 +238,7 @@ const User = ({ id }) => {
                                         name="password"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="Email"
+                                        placeholder="Password"
                                         fullWidth
                                         error={Boolean(touched.password && errors.password)}
                                     />
@@ -290,7 +290,7 @@ const User = ({ id }) => {
                                                 fullWidth
                                                 size="medium"
                                                 type="reset"
-                                                variant="contained"
+                                                variant="outlined"
                                                 color="secondary"
                                                 onClick={() => navigate('/users', { replace: true })}
                                             >
@@ -310,7 +310,7 @@ const User = ({ id }) => {
                                                 size="medium"
                                                 type="submit"
                                                 variant="contained"
-                                                color="primary"
+                                                color="secondary"
                                             >
                                                 {id ? 'Update' : 'Add'} User
                                             </Button>

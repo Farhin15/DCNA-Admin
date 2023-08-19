@@ -70,6 +70,8 @@ const AuthLogin = () => {
                 setSubmitting(false);
                 localStorage.setItem('Y_TOKEN', JSON.stringify(response.data.token));
                 localStorage.setItem('userName', event.username);
+                localStorage.setItem('first_name', response.data.first_name);
+                localStorage.setItem('last_name', response.data.last_name);
                 localStorage.setItem('user_id', response.data.user_id);
                 dispatch(hide());
                 // localStorage.setItem('Y_TOKEN', JSON.stringify(true));

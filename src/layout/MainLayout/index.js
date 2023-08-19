@@ -14,6 +14,7 @@ import Breadcrumbs from 'components/@extended/Breadcrumbs';
 
 // types
 import { openDrawer } from 'store/reducers/menu';
+import { useNavigate } from 'react-router-dom';
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
@@ -21,6 +22,7 @@ const MainLayout = () => {
     const theme = useTheme();
     const matchDownLG = useMediaQuery(theme.breakpoints.down('xl'));
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { drawerOpen } = useSelector((state) => state.menu);
 
@@ -43,6 +45,10 @@ const MainLayout = () => {
         if (open !== drawerOpen) setOpen(drawerOpen);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [drawerOpen]);
+
+    useEffect(() => {
+        navigate('/requests')
+    }, []);
 
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>

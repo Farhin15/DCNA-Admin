@@ -84,7 +84,7 @@ const Profile = () => {
         setValue(newValue);
     };
 
-    const iconBackColorOpen = 'grey.300';
+    const iconBackColorOpen = '#008000';
 
     return (
         <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -93,7 +93,7 @@ const Profile = () => {
                     p: 0.25,
                     bgcolor: open ? iconBackColorOpen : 'transparent',
                     borderRadius: 1,
-                    '&:hover': { bgcolor: 'secondary.lighter' }
+                    '&:hover': { bgcolor: '#008000' }
                 }}
                 aria-label="open profile"
                 ref={anchorRef}
@@ -103,7 +103,11 @@ const Profile = () => {
             >
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
                     {/* <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} /> */}
-                    <Typography variant="subtitle1">{localStorage.getItem('userName')}</Typography>
+                    <Typography variant="h5">
+                        <Box sx={{ textTransform: 'capitalize', textDecoration: 'underline', color: '#000080' }}>
+                            {localStorage.getItem('first_name')} {localStorage.getItem('last_name')}
+                        </Box>
+                    </Typography>
                 </Stack>
             </ButtonBase>
             <Popper
