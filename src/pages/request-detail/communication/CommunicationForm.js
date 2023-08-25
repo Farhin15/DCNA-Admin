@@ -189,12 +189,12 @@ const Communication = ({ close, requestDetail }) => {
                                             <Card>
                                                 <CardContent>
                                                     {/* <Grid item> */}
-                                                    <Typography gutterBottom variant="h4" component="h3">
+                                                    {/* <Typography gutterBottom variant="h4" component="h3">
                                                         {selectedTemplate?.name}
-                                                    </Typography>
-                                                    <Typography variant="body1" color="textSecondary" component="p">
+                                                    </Typography> */}
+                                                    {/* <Typography variant="body1" color="textSecondary" component="p">
                                                         {selectedTemplate?.description ?? ""}
-                                                    </Typography>
+                                                    </Typography> */}
                                                     <Grid item >
                                                         <span dangerouslySetInnerHTML={{ __html: selectedTemplate?.content }}></span >
                                                     </Grid>

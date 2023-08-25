@@ -37,7 +37,7 @@ const RequestInfo = ({ requestDetail }) => (
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
                         <Grid item xs={6} md={6} lg={6}><ListItemText primary="Stage:" /></Grid>
                         <Grid item xs={6} md={6} lg={6}>
-                            <Typography variant="span">Email Verification Expired</Typography>
+                            <Typography variant="span">{requestDetail?.address ?? '-'}</Typography>
                         </Grid>
                     </Grid>
                     <Grid container rowSpacing={4.5} columnSpacing={2.75}>

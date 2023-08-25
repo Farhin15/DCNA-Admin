@@ -76,8 +76,8 @@ const AuthLogin = () => {
                 dispatch(hide());
                 // localStorage.setItem('Y_TOKEN', JSON.stringify(true));
                 // if (response.data.success) {
-                navigate('/')
-                dispatch(showSuccess('Logged in successfully!'))
+                navigate('/requests')
+                // dispatch(showSuccess('Logged in successfully!'))
                 // }
                 // localStorage.getItem('Y_TOKEN') ? navigate('/') : <h1>hii</h1>;
                 // const data = localStorage.getItem('Y_TOKEN');

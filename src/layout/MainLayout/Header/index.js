@@ -21,8 +21,6 @@ const Header = ({ open, handleDrawerToggle }) => {
     const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
     const menu = useSelector((state) => state.menu.menu);
     const [title, setTitle] = useState('');
-    console.log(menu);
-    console.log(navigation);
     const iconBackColor = 'grey.100';
     const iconBackColorOpen = 'grey.200';
 
@@ -33,7 +31,6 @@ const Header = ({ open, handleDrawerToggle }) => {
                     getCollapse(collapse);
                 } else if (collapse.type && collapse.type === 'item') {
                     if (location.pathname === collapse.url) {
-                        console.log(menu, collapse);
                         setTitle(collapse.title);
                         // setMain(menu);
                         // setItem(collapse);

@@ -113,7 +113,7 @@ const TemplatesTable = ({ searchTerm }) => {
             }
         },
         sorter: {
-            compare: (a, b) => Sorter.DEFAULT(a[[dataIndex]], b[[dataIndex]]),
+            compare: (a, b) => dataIndex == 'date_created' ? Sorter.DATE(b[[dataIndex]], a[[dataIndex]]) : Sorter.DEFAULT(b[[dataIndex]], a[[dataIndex]]),
             multiple: 3,
         },
         render: (text) => {

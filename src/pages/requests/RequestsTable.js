@@ -121,10 +121,10 @@ export default function RequestsTable({ searchTerm, isExport }) {
             }
         },
         sorter: {
-            compare: (a, b) => Sorter.DEFAULT(a[[dataIndex]], b[[dataIndex]]),
+            compare: (a, b) => dataIndex == 'date_created' ? Sorter.DATE(b[[dataIndex]], a[[dataIndex]]) : Sorter.DEFAULT(b[[dataIndex]], a[[dataIndex]]),
             multiple: 3,
         },
-        render: (text) =>
+        render: (text, record) =>
             dataIndex === '_id' ? (
                 <Link component={RouterLink} to={`/requests/request-detail/${text}`}>
                     {text}
@@ -132,7 +132,8 @@ export default function RequestsTable({ searchTerm, isExport }) {
             ) :
                 dataIndex === 'date_created' ?
                     moment(text).format('yyyy-MM-DD hh:mm') :
-                    text
+                    dataIndex === 'first_name' ? text + ' ' + record?.last_name
+                        : text
     });
 
     const columns = [

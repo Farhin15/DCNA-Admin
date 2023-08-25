@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 const MainLayout = () => {
     const theme = useTheme();
-    const matchDownLG = useMediaQuery(theme.breakpoints.down('xl'));
+    const matchDownLG = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -46,9 +46,9 @@ const MainLayout = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [drawerOpen]);
 
-    useEffect(() => {
-        navigate('/requests')
-    }, []);
+    // useEffect(() => {
+    //     navigate('/requests')
+    // }, []);
 
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>
