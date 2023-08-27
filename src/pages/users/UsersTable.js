@@ -228,7 +228,6 @@ const UsersTable = ({ searchTerm, isExport, setSearchTerm }) => {
                 }
                 return x;
             })
-            console.log(columns);
             setTableColumn(columns);
         } else {
             setTableColumn(columns);

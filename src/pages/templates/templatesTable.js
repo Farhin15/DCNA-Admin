@@ -220,7 +220,6 @@ const TemplatesTable = ({ searchTerm, setSearchTerm }) => {
                 }
                 return x;
             })
-            console.log(columns);
             setTableColumn(columns);
         } else {
             setTableColumn(columns);
