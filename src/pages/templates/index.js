@@ -30,7 +30,7 @@ const Templates = () => {
                     <Grid item>
                         <Grid container columnSpacing={0.5} alignItems="center" justifyContent="end">
                             <Grid item>
-                                <Search onSearch={onSearch} placeHolder="Search" />
+                                <Search onSearch={onSearch} value={searchTerm} placeHolder="Search" />
                                 {/* <Typography variant="strong">0 SELECTED</Typography> */}
                             </Grid>
                             <Grid item>
@@ -57,7 +57,7 @@ const Templates = () => {
                     {/* <Grid item /> */}
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <TemplatesTable searchTerm={searchTerm} />
+                    <TemplatesTable searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                 </MainCard>
             </Grid>
         </Grid>

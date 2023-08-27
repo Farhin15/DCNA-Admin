@@ -13,7 +13,7 @@ import { showError, showSuccess } from 'store/reducers/snackbarSlice';
 import moment from "moment";
 import { ButtonBase } from '@mui/material';
 
-const UsersTable = ({ searchTerm, isExport }) => {
+const UsersTable = ({ searchTerm, isExport, setSearchTerm }) => {
     const allUsers = useSelector(getAllUsers);
     const [filterUser, setFilterUser] = useState([])
     const apiStatus = useSelector(getLoading);
@@ -22,6 +22,7 @@ const UsersTable = ({ searchTerm, isExport }) => {
     const navigate = useNavigate();
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
+    const [tableColumn, setTableColumn] = useState([]);
     const searchInput = useRef(null);
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -103,7 +104,7 @@ const UsersTable = ({ searchTerm, isExport }) => {
         filterIcon: (filtered) => (
             <SearchOutlined
                 style={{
-                    color: filtered ? '#1677ff' : undefined,
+                    color: filtered ? '#FFFFFF' : undefined,
                 }}
             />
         ),
@@ -117,7 +118,7 @@ const UsersTable = ({ searchTerm, isExport }) => {
         sorter: {
             // compare: (a, b) => Sorter.DEFAULT(a[[dataIndex]], b[[dataIndex]]),
             compare: (a, b) => dataIndex == 'date_created' ? Sorter.DATE(b[[dataIndex]], a[[dataIndex]]) : Sorter.DEFAULT(b[[dataIndex]], a[[dataIndex]]),
-            multiple: 3,
+            // multiple: 3,
         },
         render: (text) =>
             dataIndex === 'date_created' ? moment(text).format('yyyy-MM-DD hh:mm') : text
@@ -186,7 +187,24 @@ const UsersTable = ({ searchTerm, isExport }) => {
         },
     ];
 
+    const [pagination, setPagination] = useState();
+    const [sorter, setSorter] = useState();
+    const [filter, setFilter] = useState();
 
+    const handleTableChange1 = (pagination, filter, sorter, extra) => {
+        setPagination(pagination)
+        setSorter(sorter)
+        setFilter(filter)
+        localStorage.setItem('filter', JSON.stringify({
+            type: 'user', config: {
+                pagination: pagination,
+                sorter: sorter,
+                filter: filter,
+                globalSearchText: searchTerm
+            }
+        }))
+        // filter.first_name = 'sean'
+    };
     useEffect(() => {
         dispatch(show());
         if (allUsers.length == 0) {
@@ -200,6 +218,23 @@ const UsersTable = ({ searchTerm, isExport }) => {
     }, [allUsers]);
 
     useEffect(() => {
+        let filterConfig = JSON.parse(localStorage.getItem('filter'))
+        if (filterConfig.type == 'user') {
+            setSearchTerm(filterConfig.config.globalSearchText);
+            setPagination(filterConfig.config.pagination)
+            columns.map(x => {
+                if (x.dataIndex == filterConfig.config?.sorter?.field) {
+                    x.defaultSortOrder = filterConfig.config?.sorter?.order ?? ''
+                }
+                return x;
+            })
+            console.log(columns);
+            setTableColumn(columns);
+        } else {
+            setTableColumn(columns);
+        }
+    }, [])
+    useEffect(() => {
         if (allUsers.length && searchTerm) {
             let filterData = allUsers.filter(x => {
                 if (x?.username?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()) ||
@@ -209,11 +244,19 @@ const UsersTable = ({ searchTerm, isExport }) => {
                     return x;
             })
             setFilterUser(filterData)
+            localStorage.setItem('filter', JSON.stringify({
+                type: 'user', config: {
+                    pagination: pagination,
+                    sorter: sorter,
+                    filter: filter,
+                    globalSearchText: searchTerm
+                }
+            }))
         } else {
             setFilterUser(allUsers)
         }
 
-    }, [searchTerm]);
+    }, [searchTerm, allUsers]);
 
     function tableToCSVNew(data_table, type) {
         // Variable to store the final csv data
@@ -361,6 +404,15 @@ const UsersTable = ({ searchTerm, isExport }) => {
     }, [isExport]);
 
     const handleEditUser = (id) => {
+        // debugger
+        // localStorage.setItem('filter', JSON.stringify({
+        //     type: 'user', config: {
+        //         pagination: pagination,
+        //         sorter: sorter,
+        //         filter: filter,
+        //         globalSearchText: searchTerm
+        //     }
+        // }))
         navigate(`/users/user-detail/${id}`);
     }
 
@@ -397,7 +449,12 @@ const UsersTable = ({ searchTerm, isExport }) => {
             </>
         ) : (
             <>
-                <Table columns={columns} dataSource={filterUser} />
+                {tableColumn?.length ? <Table columns={tableColumn} dataSource={filterUser}
+                    pagination={pagination}
+                    // onChange={handleTableChange1}
+                    onChange={(val, filter, sorter, extra) => {
+                        handleTableChange1(val, filter, sorter, extra);
+                    }} /> : <></>}
             </>
         );
 

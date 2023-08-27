@@ -36,7 +36,7 @@ const Requests = () => {
                     <Grid item>
                         <Grid container columnSpacing={0.5} alignItems="center" justifyContent="end">
                             <Grid item>
-                                <Search onSearch={onSearch} placeHolder="Search" />
+                                <Search onSearch={onSearch} value={searchTerm} placeHolder="Search" />
                                 {/* <Typography variant="strong">0 SELECTED</Typography> */}
                             </Grid>
                             {/* <Grid item>
@@ -107,7 +107,7 @@ const Requests = () => {
                     {/* <Grid item /> */}
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <RequestsTable searchTerm={searchTerm} isExport={isExport} />
+                    <RequestsTable searchTerm={searchTerm} setSearchTerm={setSearchTerm} isExport={isExport} />
                 </MainCard>
             </Grid>
         </Grid>

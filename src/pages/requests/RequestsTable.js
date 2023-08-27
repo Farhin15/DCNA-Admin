@@ -30,7 +30,7 @@ function getComparator(order, orderBy) {
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export default function RequestsTable({ searchTerm, isExport }) {
+export default function RequestsTable({ searchTerm, isExport, setSearchTerm }) {
     const allRequests = useSelector(getAllRequests);
     const apiStatus = useSelector(getLoading);
     const dispatch = useDispatch();
@@ -39,6 +39,8 @@ export default function RequestsTable({ searchTerm, isExport }) {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [filterRequests, setFilterRequests] = useState([])
+    const [tableColumn, setTableColumn] = useState([]);
+
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
             <div
@@ -122,7 +124,7 @@ export default function RequestsTable({ searchTerm, isExport }) {
         },
         sorter: {
             compare: (a, b) => dataIndex == 'date_created' ? Sorter.DATE(b[[dataIndex]], a[[dataIndex]]) : Sorter.DEFAULT(b[[dataIndex]], a[[dataIndex]]),
-            multiple: 3,
+            // multiple: 3,
         },
         render: (text, record) =>
             dataIndex === '_id' ? (
@@ -196,6 +198,24 @@ export default function RequestsTable({ searchTerm, isExport }) {
             dataIndex: 'completed',
         }
     ];
+    const [pagination, setPagination] = useState();
+    const [sorter, setSorter] = useState();
+    const [filter, setFilter] = useState();
+
+    const handleTableChange1 = (pagination, filter, sorter, extra) => {
+        setPagination(pagination)
+        setSorter(sorter)
+        setFilter(filter)
+        localStorage.setItem('filter', JSON.stringify({
+            type: 'request', config: {
+                pagination: pagination,
+                sorter: sorter,
+                filter: filter,
+                globalSearchText: searchTerm
+            }
+        }))
+        // filter.first_name = 'sean'
+    };
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
         setSearchText(selectedKeys[0]);
@@ -219,6 +239,25 @@ export default function RequestsTable({ searchTerm, isExport }) {
     }, [allRequests]);
 
     useEffect(() => {
+        let filterConfig = JSON.parse(localStorage.getItem('filter'))
+        // debugger
+        if (filterConfig.type == 'request') {
+            setSearchTerm(filterConfig.config.globalSearchText);
+            setPagination(filterConfig.config.pagination)
+            columns.map(x => {
+                if (x.dataIndex == filterConfig.config?.sorter?.field) {
+                    x.defaultSortOrder = filterConfig.config?.sorter?.order ?? ''
+                }
+                return x;
+            })
+            console.log(columns);
+            setTableColumn(columns);
+        } else {
+            setTableColumn(columns);
+        }
+    }, [])
+
+    useEffect(() => {
         if (allRequests.length && searchTerm) {
             let filterData = allRequests.filter(x => {
                 if (x?.request_type?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()) ||
@@ -226,12 +265,20 @@ export default function RequestsTable({ searchTerm, isExport }) {
                     x?.first_name?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()))
                     return x;
             })
+            localStorage.setItem('filter', JSON.stringify({
+                type: 'request', config: {
+                    pagination: pagination,
+                    sorter: sorter,
+                    filter: filter,
+                    globalSearchText: searchTerm
+                }
+            }))
             setFilterRequests(filterData)
         } else {
             setFilterRequests(allRequests);
         }
 
-    }, [searchTerm]);
+    }, [searchTerm, allRequests]);
 
     function tableToCSVNew(data_table, type) {
         // Variable to store the final csv data
@@ -381,7 +428,12 @@ export default function RequestsTable({ searchTerm, isExport }) {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%' }}>
-                <Table columns={columns} dataSource={filterRequests} />
+                {tableColumn?.length ? <Table columns={tableColumn} dataSource={filterRequests}
+                    pagination={pagination}
+                    // onChange={handleTableChange1}
+                    onChange={(val, filter, sorter, extra) => {
+                        handleTableChange1(val, filter, sorter, extra);
+                    }} /> : <></>}
             </Paper>
         </Box>
     );

@@ -12,7 +12,7 @@ import moment from "moment";
 import { ButtonBase } from '@mui/material';
 import ConfirmDialog from 'components/ConfirmDialog';
 
-const TemplatesTable = ({ searchTerm }) => {
+const TemplatesTable = ({ searchTerm, setSearchTerm }) => {
     const allTemplates = useSelector(getAllTemplates);
     const apiStatus = useSelector(getLoading);
     const dispatch = useDispatch();
@@ -22,6 +22,7 @@ const TemplatesTable = ({ searchTerm }) => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [filterTemplates, setFilterTemplates] = useState()
+    const [tableColumn, setTableColumn] = useState([]);
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -101,7 +102,7 @@ const TemplatesTable = ({ searchTerm }) => {
         filterIcon: (filtered) => (
             <SearchOutlined
                 style={{
-                    color: filtered ? '#1677ff' : undefined,
+                    color: filtered ? '#FFFFFF' : undefined,
                 }}
             />
         ),
@@ -114,7 +115,7 @@ const TemplatesTable = ({ searchTerm }) => {
         },
         sorter: {
             compare: (a, b) => dataIndex == 'date_created' ? Sorter.DATE(b[[dataIndex]], a[[dataIndex]]) : Sorter.DEFAULT(b[[dataIndex]], a[[dataIndex]]),
-            multiple: 3,
+            // multiple: 3,
         },
         render: (text) => {
             if (dataIndex == 'content') {
@@ -181,12 +182,50 @@ const TemplatesTable = ({ searchTerm }) => {
     ];
 
 
+    const [pagination, setPagination] = useState();
+    const [sorter, setSorter] = useState();
+    const [filter, setFilter] = useState();
+
+    const handleTableChange1 = (pagination, filter, sorter, extra) => {
+        setPagination(pagination)
+        setSorter(sorter)
+        setFilter(filter)
+        localStorage.setItem('filter', JSON.stringify({
+            type: 'template', config: {
+                pagination: pagination,
+                sorter: sorter,
+                filter: filter,
+                globalSearchText: searchTerm
+            }
+        }))
+        // filter.first_name = 'sean'
+    };
+
     useEffect(() => {
         dispatch(show());
         if (allTemplates.length == 0) {
             dispatch(fetchALLTemplates());
         }
     }, [dispatch]);
+
+    useEffect(() => {
+        let filterConfig = JSON.parse(localStorage.getItem('filter'))
+        // debugger
+        if (filterConfig.type == 'template') {
+            setSearchTerm(filterConfig.config.globalSearchText);
+            setPagination(filterConfig.config.pagination)
+            columns.map(x => {
+                if (x.dataIndex == filterConfig.config?.sorter?.field) {
+                    x.defaultSortOrder = filterConfig.config?.sorter?.order ?? ''
+                }
+                return x;
+            })
+            console.log(columns);
+            setTableColumn(columns);
+        } else {
+            setTableColumn(columns);
+        }
+    }, [])
 
     useEffect(() => {
         setFilterTemplates(allTemplates)
@@ -201,12 +240,20 @@ const TemplatesTable = ({ searchTerm }) => {
                     x?.description?.toLowerCase()?.trim()?.includes(searchTerm?.toLowerCase()?.trim()))
                     return x;
             })
+            localStorage.setItem('filter', JSON.stringify({
+                type: 'template', config: {
+                    pagination: pagination,
+                    sorter: sorter,
+                    filter: filter,
+                    globalSearchText: searchTerm
+                }
+            }))
             setFilterTemplates(filterData)
         } else {
             setFilterTemplates(allTemplates)
         }
 
-    }, [searchTerm]);
+    }, [searchTerm, allTemplates]);
 
     const handleEditTemplate = (id) => {
         navigate(`/templates/detail/${id}`);
@@ -242,7 +289,12 @@ const TemplatesTable = ({ searchTerm }) => {
             </>
         ) : (
             <>
-                <Table columns={columns} dataSource={filterTemplates} />
+                {tableColumn?.length ? <Table columns={tableColumn} dataSource={filterTemplates}
+                    pagination={pagination}
+                    // onChange={handleTableChange1}
+                    onChange={(val, filter, sorter, extra) => {
+                        handleTableChange1(val, filter, sorter, extra);
+                    }} /> : <></>}
                 {/* <ConfirmDialog /> */}
             </>
         );
