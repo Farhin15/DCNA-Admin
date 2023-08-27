@@ -74,7 +74,7 @@ const TemplatesTable = ({ searchTerm, setSearchTerm }) => {
                     >
                         Reset
                     </Button>
-                    <Button
+                    {/* <Button
                         type="link"
                         size="small"
                         onClick={() => {
@@ -86,7 +86,7 @@ const TemplatesTable = ({ searchTerm, setSearchTerm }) => {
                         }}
                     >
                         Filter
-                    </Button>
+                    </Button> */}
                     <Button
                         type="link"
                         size="small"

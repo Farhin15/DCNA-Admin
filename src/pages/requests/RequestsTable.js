@@ -82,7 +82,7 @@ export default function RequestsTable({ searchTerm, isExport, setSearchTerm }) {
                     >
                         Reset
                     </Button>
-                    <Button
+                    {/* <Button
                         type="link"
                         size="small"
                         onClick={() => {
@@ -94,7 +94,7 @@ export default function RequestsTable({ searchTerm, isExport, setSearchTerm }) {
                         }}
                     >
                         Filter
-                    </Button>
+                    </Button> */}
                     <Button
                         type="link"
                         size="small"
@@ -110,11 +110,11 @@ export default function RequestsTable({ searchTerm, isExport, setSearchTerm }) {
         filterIcon: (filtered) => (
             <SearchOutlined
                 style={{
-                    color: filtered ? '#1677ff' : undefined,
+                    color: filtered ? '#FFFFFF' : undefined,
                 }}
             />
         ),
-        width: dataIndex == 'date_created' || dataIndex == 'days_left' || dataIndex == 'request_type' ? '20%' : '10%',
+        width: dataIndex == '_id' ? '55%' : dataIndex == 'date_created' || dataIndex == 'days_left' || dataIndex == 'request_type' ? '25%' : 'auto',
         onFilter: (value, record) =>
             record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase()),
         onFilterDropdownOpenChange: (visible) => {

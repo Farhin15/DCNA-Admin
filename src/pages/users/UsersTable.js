@@ -100,7 +100,7 @@ const UsersTable = ({ searchTerm, isExport, setSearchTerm }) => {
                 </Space>
             </div>
         ),
-        width: '15%',
+        width: dataIndex == 'username' ? '25%' : '15%',
         filterIcon: (filtered) => (
             <SearchOutlined
                 style={{
